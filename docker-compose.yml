@@ -1,0 +1,62 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pdf-joiner-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}
+      - DEBUG=${DEBUG:-False}
+      - HOST=0.0.0.0
+      - PORT=5000
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://localhost:3001}
+      - MAX_FILE_SIZE=${MAX_FILE_SIZE:-52428800}
+      - MAX_FILES_PER_REQUEST=${MAX_FILES_PER_REQUEST:-20}
+      - RATE_LIMIT=${RATE_LIMIT:-100 per hour}
+      - SESSION_TIMEOUT=${SESSION_TIMEOUT:-3600}
+      - THUMBNAIL_DPI=${THUMBNAIL_DPI:-150}
+      - THUMBNAIL_QUALITY=${THUMBNAIL_QUALITY:-85}
+      - CLEANUP_INTERVAL=${CLEANUP_INTERVAL:-3600}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./backend/temp:/app/temp
+      - ./backend/logs:/app/logs
+      # Note: temp folder includes uploads, thumbnails, and merged subdirectories
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - pdf-joiner-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:5000/api
+        - VITE_API_TARGET=http://localhost:5000
+    container_name: pdf-joiner-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - pdf-joiner-network
+
+networks:
+  pdf-joiner-network:
+    driver: bridge
