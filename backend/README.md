@@ -89,8 +89,8 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/dosibridge/pdf-joiner-pro.git
-   cd pdf-joiner-pro/backend
+   git clone https://github.com/DosiBridge/pdfjoiner-tool.git
+   cd pdfjoiner-tool/backend
    ```
 
 2. **Create a virtual environment**
@@ -353,13 +353,18 @@ We welcome contributions! Please follow these steps:
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 💬 Support
 
 - **Website**: [DosiBridge](https://dosibridge.com)
-- **Issues**: [GitHub Issues](https://github.com/dosibridge/pdf-joiner-pro/issues)
-- **Documentation**: Check the project root `/docs` folder for detailed API documentation
+- **GitHub Repository**: [DosiBridge/pdfjoiner-tool](https://github.com/DosiBridge/pdfjoiner-tool)
+- **Issues**: [GitHub Issues](https://github.com/DosiBridge/pdfjoiner-tool/issues)
+- **Main Documentation**: [Main README](../README.md)
+- **Documentation Index**: [DOCUMENTATION.md](../DOCUMENTATION.md)
+- **Frontend Documentation**: [Frontend README](../frontend/README.md)
+- **Docker Guide**: [DOCKER.md](../DOCKER.md)
+- **Production Deployment**: [PRODUCTION_DEPLOYMENT.md](../PRODUCTION_DEPLOYMENT.md)
 
 ## 🙏 Acknowledgments
 

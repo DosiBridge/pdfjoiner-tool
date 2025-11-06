@@ -24,8 +24,8 @@ This guide explains how to build and run PDF Joiner Pro using Docker.
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/dosibridge/pdf-joiner-pro.git
-   cd pdf-joiner-pro
+   git clone https://github.com/DosiBridge/pdfjoiner-tool.git
+   cd pdfjoiner-tool
    ```
 
 2. **Create environment file** (optional)
@@ -330,10 +330,14 @@ See [GitHub Actions Workflows](.github/workflows/README.md) for automated build 
 
 ## Additional Resources
 
-- [Backend README](backend/README.md)
-- [Frontend README](frontend/README.md)
+- **[Main README](../README.md)** - Project overview and quick start
+- **[Documentation Index](../DOCUMENTATION.md)** - Complete documentation index
+- **[Frontend README](../frontend/README.md)** - Frontend documentation
+- **[Backend README](../backend/README.md)** - Backend documentation
+- **[Production Deployment](../PRODUCTION_DEPLOYMENT.md)** - Production deployment guide
 - [Docker Documentation](https://docs.docker.com/)
 - [Docker Compose Documentation](https://docs.docker.com/compose/)
+- [Docker Hub](https://hub.docker.com)
 
 ---
 

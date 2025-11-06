@@ -15,8 +15,8 @@
 
 **Made with ❤️ by [DosiBridge](https://dosibridge.com)**
 
-[![GitHub stars](https://img.shields.io/github/stars/dosibridge/pdf-joiner-pro?style=social)](https://github.com/dosibridge/pdf-joiner-pro)
-[![GitHub forks](https://img.shields.io/github/forks/dosibridge/pdf-joiner-pro?style=social)](https://github.com/dosibridge/pdf-joiner-pro)
+[![GitHub stars](https://img.shields.io/github/stars/DosiBridge/pdfjoiner-tool?style=social)](https://github.com/DosiBridge/pdfjoiner-tool)
+[![GitHub forks](https://img.shields.io/github/forks/DosiBridge/pdfjoiner-tool?style=social)](https://github.com/DosiBridge/pdfjoiner-tool)
 
 </div>
 
@@ -27,6 +27,7 @@
 - [Architecture](#-architecture)
 - [Quick Start](#-quick-start)
 - [Documentation](#-documentation)
+- [Deployment](#-deployment)
 - [Contributing](#-contributing)
 - [License](#-license)
 - [Support](#-support)
@@ -74,21 +75,12 @@ This project consists of two main components:
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- **Node.js** >= 18.0.0
-- **Python** >= 3.8
-- **poppler-utils** (for PDF to image conversion)
-  - Ubuntu/Debian: `sudo apt-get install poppler-utils`
-  - macOS: `brew install poppler`
-  - Windows: [Download here](https://github.com/oschwartz10612/poppler-windows/releases)
-
-### Installation
+### Option 1: Local Development
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/dosibridge/pdf-joiner-pro.git
-   cd pdf-joiner-pro
+   git clone https://github.com/DosiBridge/pdfjoiner-tool.git
+   cd pdfjoiner-tool
    ```
 
 2. **Backend Setup**
@@ -115,16 +107,66 @@ This project consists of two main components:
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:5000/api
 
-For detailed setup instructions, see:
-- [Frontend Documentation](frontend/README.md)
-- [Backend Documentation](backend/README.md)
+### Option 2: Docker Compose (Recommended)
+
+```bash
+# Clone repository
+git clone https://github.com/DosiBridge/pdfjoiner-tool.git
+cd pdfjoiner-tool
+
+# Start services
+docker-compose up -d --build
+
+# Access application
+# Frontend: http://localhost:3000
+# Backend: http://localhost:5000/api
+```
+
+For detailed Docker instructions, see [DOCKER.md](DOCKER.md).
+
+### Option 3: Production Deployment
+
+For production deployment using Docker Hub images, see [PRODUCTION_DEPLOYMENT.md](PRODUCTION_DEPLOYMENT.md).
 
 ## 📚 Documentation
 
-- **[Frontend README](frontend/README.md)** - Frontend setup, development, and usage
-- **[Backend README](backend/README.md)** - Backend API documentation and setup
-- **[Contributing Guide](CONTRIBUTING.md)** - How to contribute to the project
-- **[Security Policy](SECURITY.md)** - Security guidelines and reporting
+### Getting Started
+- **[Frontend README](frontend/README.md)** - Frontend setup, development, and usage guide
+- **[Backend README](backend/README.md)** - Backend API documentation and setup guide
+- **[DOCKER.md](DOCKER.md)** - Docker setup and usage guide
+- **[PRODUCTION_DEPLOYMENT.md](PRODUCTION_DEPLOYMENT.md)** - Production deployment guide using Docker Hub images
+- **[DOCUMENTATION.md](DOCUMENTATION.md)** - Complete documentation index
+
+### Development & Contribution
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - How to contribute to the project
+- **[SECURITY.md](SECURITY.md)** - Security policy and vulnerability reporting
+- **[GITHUB_SECRETS.md](GITHUB_SECRETS.md)** - GitHub Actions secrets configuration
+- **[WHY_VITE_API_URL.md](WHY_VITE_API_URL.md)** - Explanation of frontend API URL configuration
+
+### Configuration
+- **Backend**: See [backend/.env.example](backend/.env.example) for environment variables
+- **Frontend**: See [frontend/.env.example](frontend/.env.example) for environment variables
+- **Production**: See [env.prod.example](env.prod.example) for production environment variables
+
+## 🐳 Deployment
+
+### Docker Compose (Development)
+```bash
+docker-compose up -d --build
+```
+See [DOCKER.md](DOCKER.md) for detailed instructions.
+
+### Production (Docker Hub Images)
+```bash
+docker-compose -f docker-compose.prod.yml --env-file .env.prod pull
+docker-compose -f docker-compose.prod.yml --env-file .env.prod up -d
+```
+See [PRODUCTION_DEPLOYMENT.md](PRODUCTION_DEPLOYMENT.md) for complete production deployment guide.
+
+### CI/CD
+- GitHub Actions workflows automatically build and push Docker images
+- See [.github/workflows/](.github/workflows/) for workflow definitions
+- See [GITHUB_SECRETS.md](GITHUB_SECRETS.md) for required secrets
 
 ## 🤝 Contributing
 
@@ -140,12 +182,13 @@ Please read our [Code of Conduct](CONTRIBUTING.md#code-of-conduct) before contri
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](frontend/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](backend/LICENSE) file for details.
 
 ## 💬 Support
 
 - **Website**: [DosiBridge](https://dosibridge.com)
-- **Issues**: [GitHub Issues](https://github.com/dosibridge/pdf-joiner-pro/issues)
+- **GitHub Repository**: [DosiBridge/pdfjoiner-tool](https://github.com/DosiBridge/pdfjoiner-tool)
+- **Issues**: [GitHub Issues](https://github.com/DosiBridge/pdfjoiner-tool/issues)
 - **Email**: contact@dosibridge.com
 - **Security**: security@dosibridge.com (for security vulnerabilities)
 
@@ -169,4 +212,3 @@ This project is licensed under the MIT License - see the [LICENSE](frontend/LICE
 [⬆ Back to Top](#pdf-joiner-pro)
 
 </div>
-

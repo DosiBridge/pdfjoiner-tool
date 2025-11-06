@@ -21,7 +21,7 @@ This project adheres to a code of conduct that all contributors are expected to 
 
 ### Reporting Bugs
 
-1. Check if the bug has already been reported in [Issues](https://github.com/dosibridge/pdf-joiner-pro/issues)
+1. Check if the bug has already been reported in [Issues](https://github.com/DosiBridge/pdfjoiner-tool/issues)
 2. If not, create a new issue with:
    - Clear title and description
    - Steps to reproduce
@@ -213,9 +213,12 @@ When requesting features, include:
 
 ## Getting Help
 
-- **Documentation**: Check README files
-- **Issues**: Search existing issues
-- **Discussions**: Use GitHub Discussions for questions
+- **[Main README](../README.md)** - Project overview and quick start
+- **[Documentation Index](../DOCUMENTATION.md)** - Complete documentation index
+- **[Frontend README](../frontend/README.md)** - Frontend setup guide
+- **[Backend README](../backend/README.md)** - Backend setup guide
+- **[Docker Guide](../DOCKER.md)** - Docker setup guide
+- **Issues**: [GitHub Issues](https://github.com/DosiBridge/pdfjoiner-tool/issues)
 - **Email**: contact@dosibridge.com
 
 ## Recognition
