@@ -1,10 +1,20 @@
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
 // Get environment variables with fallbacks
 // Use process.env for build-time variables (available in vite.config.js)
 // Use import.meta.env for runtime variables (available in application code)
-const API_TARGET = process.env.VITE_API_TARGET || process.env.VITE_API_URL || 'http://localhost:5000'
+// Derive API_TARGET from VITE_API_URL (remove /api if present)
+const getApiTarget = () => {
+  const apiUrl = process.env.VITE_API_URL || 'http://localhost:5000/api';
+  // If it ends with /api, remove it to get the base URL
+  if (apiUrl.endsWith('/api')) {
+    return apiUrl.slice(0, -4); // Remove '/api'
+  }
+  // If it's already a base URL, use it
+  return apiUrl.replace(/\/api\/?$/, '') || 'http://localhost:5000';
+};
+const API_TARGET = process.env.VITE_API_TARGET || getApiTarget()
 const DEV_PORT = parseInt(process.env.VITE_DEV_SERVER_PORT || '3000', 10)
 const DEV_HOST = process.env.VITE_DEV_SERVER_HOST || 'localhost'
 

@@ -24,11 +24,17 @@ COPY . .
 # Create necessary directories
 RUN mkdir -p temp/uploads temp/thumbnails temp/merged logs
 
+# Accept build arguments for configuration
+# SECURITY: Production values MUST be passed from GitHub Actions secrets
+# Default values are for local development only
+ARG CORS_ORIGINS=http://localhost:3000
+
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 ENV FLASK_APP=app/main.py
 ENV PORT=5000
+ENV CORS_ORIGINS=${CORS_ORIGINS}
 
 # Expose port
 EXPOSE 5000

@@ -17,8 +17,11 @@ COPY . .
 
 # Build the application
 # Set build-time environment variables using ARG (available during build)
+# SECURITY: Production values MUST be passed from GitHub Actions secrets
+# Default values are for local development only
+# VITE_API_TARGET is optional - if not set, it's automatically derived from VITE_API_URL
 ARG VITE_API_URL=http://localhost:5000/api
-ARG VITE_API_TARGET=http://localhost:5000
+ARG VITE_API_TARGET=
 
 # Make ARG available as ENV for the build process
 ENV VITE_API_URL=${VITE_API_URL}

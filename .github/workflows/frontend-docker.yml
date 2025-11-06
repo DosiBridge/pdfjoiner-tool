@@ -27,8 +27,8 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            --build-arg VITE_API_URL=${VITE_API_URL:-http://localhost:5000/api} \
-            --build-arg VITE_API_TARGET=${VITE_API_TARGET:-http://localhost:5000} \
+            --build-arg VITE_API_URL=${{ secrets.BACKEND_API_URL || 'http://localhost:5000/api' }} \
+            --build-arg VITE_API_TARGET=${{ secrets.BACKEND_API_TARGET || '' }} \
             -t pdf-joiner-pro-frontend:latest \
             ./frontend
 

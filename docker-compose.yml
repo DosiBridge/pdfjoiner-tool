@@ -40,7 +40,7 @@ services:
       dockerfile: Dockerfile
       args:
         - VITE_API_URL=http://localhost:5000/api
-        - VITE_API_TARGET=http://localhost:5000
+        - VITE_API_TARGET=
     container_name: pdf-joiner-frontend
     ports:
       - "3000:3000"

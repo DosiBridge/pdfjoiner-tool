@@ -26,7 +26,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t pdf-joiner-pro-backend:latest ./backend
+          docker build \
+            --build-arg CORS_ORIGINS="${{ secrets.CORS_ORIGINS || 'http://localhost:3000' }}" \
+            -t pdf-joiner-pro-backend:latest \
+            ./backend
 
       - name: Push Docker image
         run: |
