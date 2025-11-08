@@ -3,7 +3,7 @@ import logging
 import sys
 import time
 from pathlib import Path
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -39,13 +39,21 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # Enable CORS
-CORS(app, resources={
-    r"/api/*": {
-        "origins": Config.CORS_ORIGINS,
-        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization"]
-    }
-})
+# Log CORS origins for debugging
+logger.info(f"CORS Origins: {Config.CORS_ORIGINS}")
+
+CORS(app, 
+    resources={
+        r"/api/*": {
+            "origins": Config.CORS_ORIGINS,
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"],
+            "supports_credentials": True,
+            "expose_headers": ["Content-Type", "Content-Disposition"]
+        }
+    },
+    supports_credentials=True,
+    automatic_options=True)
 
 # Rate limiting
 limiter = Limiter(
@@ -70,6 +78,18 @@ app.config['start_time'] = time.time()
 app.register_blueprint(upload_bp, url_prefix='/api')
 app.register_blueprint(preview_bp, url_prefix='/api')
 app.register_blueprint(merge_bp, url_prefix='/api')
+
+
+# Add before_request handler to log CORS-related info
+@app.before_request
+def log_request_info():
+    """Log request information for debugging CORS issues."""
+    if request.method == 'OPTIONS':
+        logger.info(f"OPTIONS preflight request from origin: {request.headers.get('Origin', 'None')}")
+    origin = request.headers.get('Origin', 'None')
+    if origin != 'None':
+        logger.info(f"Request from origin: {origin}, path: {request.path}, method: {request.method}")
+
 
 
 # Health check endpoint

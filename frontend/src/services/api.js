@@ -8,9 +8,15 @@ import axios from 'axios';
 const getApiBaseUrl = () => {
   // If VITE_API_URL is explicitly set, use it
   if (import.meta.env.VITE_API_URL) {
-    const url = import.meta.env.VITE_API_URL.trim();
-    // If it's an absolute URL, use it as-is
+    let url = import.meta.env.VITE_API_URL.trim();
+    // If it's an absolute URL, ensure it ends with /api
     if (url.startsWith('http://') || url.startsWith('https://')) {
+      // Remove trailing slash if present
+      url = url.replace(/\/+$/, '');
+      // Ensure it ends with /api
+      if (!url.endsWith('/api')) {
+        url = url + '/api';
+      }
       return url;
     }
     // If it's a relative path, use it as-is (will use proxy in dev)
@@ -23,6 +29,11 @@ const getApiBaseUrl = () => {
 
 const API_BASE_URL = getApiBaseUrl();
 
+// Log API base URL in development for debugging
+if (import.meta.env.DEV) {
+  console.log('API Base URL:', API_BASE_URL);
+}
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -34,7 +45,13 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('API Error:', error.response?.data || error.message);
+    const requestUrl = error.config ? `${error.config.baseURL}${error.config.url}` : 'unknown';
+    console.error('API Error:', {
+      message: error.message,
+      url: requestUrl,
+      status: error.response?.status,
+      data: error.response?.data
+    });
     return Promise.reject(error);
   }
 );
