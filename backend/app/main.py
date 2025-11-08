@@ -3,7 +3,7 @@ import logging
 import sys
 import time
 from pathlib import Path
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, g
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -18,6 +18,8 @@ from app.routes.preview import preview_bp
 from app.routes.merge import merge_bp
 from app.services.file_manager import FileManager
 from app.models.schemas import HealthResponse
+from app.utils.middleware import add_request_id, log_request_time, get_request_id
+from app.utils.metrics import metrics, get_system_stats, get_folder_size
 
 # Ensure directories exist before configuring logging
 Config.ensure_directories()
@@ -34,6 +36,14 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+# Optional compression - install Flask-Compress for better performance
+try:
+    from flask_compress import Compress
+    COMPRESS_AVAILABLE = True
+except ImportError:
+    COMPRESS_AVAILABLE = False
+    logger.warning("Flask-Compress not installed. Install it for better performance: pip install Flask-Compress")
+
 # Create Flask app
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -49,17 +59,27 @@ CORS(app,
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"],
             "supports_credentials": True,
-            "expose_headers": ["Content-Type", "Content-Disposition"]
+            "expose_headers": ["Content-Type", "Content-Disposition", "X-Request-ID", "X-Response-Time", "X-Thumbnail-Generation-Time"]
         }
     },
     supports_credentials=True,
     automatic_options=True)
 
+# Add response compression for faster transfers (gzip/brotli) - optional
+if COMPRESS_AVAILABLE:
+    compress = Compress()
+    compress.init_app(app)
+    logger.info("Response compression enabled")
+else:
+    logger.info("Response compression disabled (Flask-Compress not installed)")
+
 # Rate limiting
 limiter = Limiter(
     app=app,
     key_func=get_remote_address,
-    default_limits=[Config.RATE_LIMIT]
+    default_limits=[Config.RATE_LIMIT],
+    storage_uri="memory://",  # Use in-memory storage for better performance
+    default_limits_per_method=True
 )
 
 # Directories already ensured above
@@ -80,29 +100,82 @@ app.register_blueprint(preview_bp, url_prefix='/api')
 app.register_blueprint(merge_bp, url_prefix='/api')
 
 
-# Add before_request handler to log CORS-related info
+# Add middleware for request tracking
 @app.before_request
-def log_request_info():
-    """Log request information for debugging CORS issues."""
+def before_request():
+    """Add request ID and start timing."""
+    add_request_id()
     if request.method == 'OPTIONS':
-        logger.info(f"OPTIONS preflight request from origin: {request.headers.get('Origin', 'None')}")
-    origin = request.headers.get('Origin', 'None')
-    if origin != 'None':
-        logger.info(f"Request from origin: {origin}, path: {request.path}, method: {request.method}")
+        logger.debug(f"OPTIONS preflight request from origin: {request.headers.get('Origin', 'None')}")
+
+
+@app.after_request
+def after_request(response):
+    """Log request completion and record metrics."""
+    # Record metrics
+    duration = time.time() - g.start_time
+    endpoint = request.endpoint or 'unknown'
+    metrics.record_request(endpoint, duration, response.status_code)
+    
+    # Add request ID to response headers
+    response.headers['X-Request-ID'] = get_request_id()
+    response.headers['X-Response-Time'] = f"{duration:.3f}s"
+    
+    # Log request completion
+    log_request_time()
+    
+    return response
 
 
 
 # Health check endpoint
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """Health check endpoint."""
+    """Enhanced health check endpoint with system stats."""
     uptime = time.time() - app.config['start_time']
-    response = HealthResponse(
-        status="healthy",
-        version="1.0.0",
-        uptime=uptime
-    )
-    return jsonify(response.dict()), 200
+    
+    # Get system statistics
+    system_stats = get_system_stats()
+    
+    # Get folder sizes
+    upload_size = get_folder_size(Config.UPLOAD_FOLDER)
+    thumbnail_size = get_folder_size(Config.THUMBNAIL_FOLDER)
+    merged_size = get_folder_size(Config.MERGED_FOLDER)
+    
+    # Get metrics
+    app_metrics = metrics.get_stats()
+    
+    response = {
+        'status': 'healthy',
+        'version': '1.0.0',
+        'uptime_seconds': round(uptime, 2),
+        'uptime_human': f"{int(uptime // 3600)}h {int((uptime % 3600) // 60)}m {int(uptime % 60)}s",
+        'system': system_stats,
+        'storage': {
+            'uploads_mb': round(upload_size / (1024 * 1024), 2),
+            'thumbnails_mb': round(thumbnail_size / (1024 * 1024), 2),
+            'merged_mb': round(merged_size / (1024 * 1024), 2),
+            'total_mb': round((upload_size + thumbnail_size + merged_size) / (1024 * 1024), 2)
+        },
+        'metrics': app_metrics,
+        'request_id': get_request_id()
+    }
+    
+    return jsonify(response), 200
+
+
+# Metrics endpoint
+@app.route('/api/metrics', methods=['GET'])
+def get_metrics():
+    """Get application performance metrics."""
+    stats = metrics.get_stats()
+    system_stats = get_system_stats()
+    
+    return jsonify({
+        'application': stats,
+        'system': system_stats,
+        'request_id': get_request_id()
+    }), 200
 
 
 # Session cleanup endpoint

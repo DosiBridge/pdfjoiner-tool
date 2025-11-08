@@ -33,16 +33,17 @@ class Config:
     # CORS origins - comma-separated list, strip whitespace
     cors_origins_str = os.getenv('CORS_ORIGINS', 'http://localhost:3000,http://localhost:5173')
     CORS_ORIGINS = [origin.strip() for origin in cors_origins_str.split(',') if origin.strip()]
-    RATE_LIMIT = os.getenv('RATE_LIMIT', '100/hour')
+    RATE_LIMIT = os.getenv('RATE_LIMIT', '1000/hour')  # Increased for better UX
     
     # Session configuration
     SESSION_TIMEOUT = int(os.getenv('SESSION_TIMEOUT', 3600))
     CLEANUP_INTERVAL = int(os.getenv('CLEANUP_INTERVAL', 1800))
     
-    # Preview configuration
-    THUMBNAIL_SIZE = int(os.getenv('THUMBNAIL_SIZE', 200))
-    THUMBNAIL_QUALITY = int(os.getenv('THUMBNAIL_QUALITY', 85))
-    MAX_PREVIEW_PAGES = int(os.getenv('MAX_PREVIEW_PAGES', 100))
+    # Preview configuration - optimized for speed
+    THUMBNAIL_SIZE = int(os.getenv('THUMBNAIL_SIZE', 150))  # Smaller size for faster generation
+    THUMBNAIL_QUALITY = int(os.getenv('THUMBNAIL_QUALITY', 60))  # Lower quality for speed (still acceptable)
+    MAX_PREVIEW_PAGES = int(os.getenv('MAX_PREVIEW_PAGES', 10000))  # Increased for large PDFs
+    PAGES_PER_PAGE = int(os.getenv('PAGES_PER_PAGE', 100))  # Increased pages per pagination
     
     # Performance
     WORKER_THREADS = int(os.getenv('WORKER_THREADS', 4))

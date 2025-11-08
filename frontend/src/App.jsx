@@ -27,6 +27,7 @@ function App() {
   });
   const [jobId, setJobId] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [isMerging, setIsMerging] = useState(false);
 
   useEffect(() => {
@@ -59,9 +60,24 @@ function App() {
 
   const handleFilesSelected = async (files) => {
     setIsUploading(true);
+    setUploadProgress(1); // Start with 1% to show progress bar immediately
     
     try {
-      const response = await pdfAPI.uploadFiles(files, sessionId);
+      const response = await pdfAPI.uploadFiles(
+        files, 
+        sessionId,
+        (progress) => {
+          // Ensure progress is always between 0 and 100
+          const clampedProgress = Math.max(0, Math.min(100, progress));
+          setUploadProgress(clampedProgress);
+        }
+      );
+      
+      // Set to 100% when complete
+      setUploadProgress(100);
+      
+      // Small delay before hiding to show completion
+      await new Promise(resolve => setTimeout(resolve, 300));
       
       if (response.uploaded_files && response.uploaded_files.length > 0) {
         setUploadedFiles((prev) => [...prev, ...response.uploaded_files]);
@@ -80,9 +96,26 @@ function App() {
       }
     } catch (error) {
       console.error('Upload error:', error);
-      toast.error('Failed to upload files');
+      
+      // Extract meaningful error message
+      let errorMessage = 'Failed to upload files';
+      if (error.formattedMessage) {
+        errorMessage = error.formattedMessage;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      toast.error(errorMessage);
     } finally {
-      setIsUploading(false);
+      // Small delay before hiding progress bar
+      setTimeout(() => {
+        setIsUploading(false);
+        setUploadProgress(0);
+      }, 500);
     }
   };
 
@@ -160,7 +193,20 @@ function App() {
       toast.success('PDFs merged successfully!');
     } catch (error) {
       console.error('Merge error:', error);
-      toast.error('Failed to merge PDFs');
+      
+      // Extract meaningful error message
+      let errorMessage = 'Failed to merge PDFs';
+      if (error.formattedMessage) {
+        errorMessage = error.formattedMessage;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setIsMerging(false);
     }
@@ -225,6 +271,8 @@ function App() {
               <FileUploader
                 onFilesSelected={handleFilesSelected}
                 existingFilesCount={uploadedFiles.length}
+                isUploading={isUploading}
+                uploadProgress={uploadProgress}
               />
             </div>
 
