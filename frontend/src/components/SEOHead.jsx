@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const BASE_URL = 'https://pdfjoiner.dosibridge.com';
 
-function SEOHead({ title, description, path = '/', keywords, faqItems }) {
+function SEOHead({ title, description, path = '/', keywords, faqItems, noindex = false }) {
   useEffect(() => {
     document.title = title;
 
@@ -19,6 +19,12 @@ function SEOHead({ title, description, path = '/', keywords, faqItems }) {
     if (keywords) {
       setMeta('name', 'keywords', keywords);
     }
+
+    // Set robots meta for noindex pages
+    setMeta('name', 'robots', noindex
+      ? 'noindex, nofollow'
+      : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
+    );
 
     // Update canonical
     const canonical = document.querySelector('link[rel="canonical"]');

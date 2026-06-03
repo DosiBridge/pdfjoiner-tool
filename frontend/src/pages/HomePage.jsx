@@ -68,8 +68,8 @@ function HomePage() {
   return (
     <>
       <SEOHead
-        title="Merge PDF Files Online Free — No Signup, No Watermark | DOSIBridge"
-        description="Combine multiple PDF files into one document instantly. Free PDF merger with drag-and-drop reorder, no signup, no watermark, and mobile support."
+        title="Merge PDF Online Free — No Signup, No Watermark, Unlimited | DOSIBridge"
+        description="Merge PDFs online for free. Reorder pages, combine CVs, certificates, scanned files, and documents. No signup, no watermark, unlimited, works on mobile."
         path="/"
         keywords="PDF joiner, merge PDF, combine PDF files, PDF merger online, free PDF tool, join PDF, merge PDF pages, reorder PDF, merge PDF no watermark"
         faqItems={faqItems}

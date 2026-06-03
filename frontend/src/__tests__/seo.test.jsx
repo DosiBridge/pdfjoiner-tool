@@ -8,7 +8,7 @@ vi.mock('../components/PdfTool', () => ({
 
 describe('SEO - Page Metadata', () => {
   const pages = [
-    { route: '/', titleContains: 'Merge PDF Files Online Free' },
+    { route: '/', titleContains: 'Merge PDF Online Free' },
     { route: '/merge-pdf', titleContains: 'Merge PDF' },
     { route: '/pdf-joiner', titleContains: 'PDF Joiner' },
     { route: '/combine-pdf-files', titleContains: 'Combine PDF Files' },
