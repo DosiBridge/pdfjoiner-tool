@@ -237,6 +237,45 @@ class PDFProcessor:
             raise
     
     @staticmethod
+    def compress_pdf(
+        pdf_path: Path,
+        output_path: Path,
+        quality: str = 'medium'
+    ) -> int:
+        """
+        Compress a PDF by removing unused objects and compressing streams.
+
+        Args:
+            pdf_path: Source PDF file
+            output_path: Output PDF file path
+            quality: Compression quality (low, medium, high)
+
+        Returns:
+            int: Total number of pages
+        """
+        try:
+            reader = PdfReader(str(pdf_path))
+            writer = PdfWriter()
+
+            for page in reader.pages:
+                writer.add_page(page)
+
+            # Remove unused objects and compress
+            writer.compress_identical_objects(remove_identicals=True, remove_orphans=True)
+
+            for page in writer.pages:
+                page.compress_content_streams()
+
+            with open(output_path, 'wb') as f:
+                writer.write(f)
+
+            return len(writer.pages)
+
+        except Exception as e:
+            logger.error(f"Error compressing PDF: {e}")
+            raise
+
+    @staticmethod
     def validate_pdf(pdf_path: Path) -> Tuple[bool, str]:
         """
         Validate if PDF is readable and not corrupted.

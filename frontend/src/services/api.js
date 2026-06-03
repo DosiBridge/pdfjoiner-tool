@@ -246,6 +246,41 @@ export const pdfAPI = {
     const response = await api.get('/health');
     return response.data;
   },
+
+  // ── Tool APIs ──
+
+  compressPdf: async (sessionId, fileId, quality = 'medium') => {
+    const response = await api.post('/compress', { session_id: sessionId, file_id: fileId, quality }, { timeout: 120000 });
+    return response.data;
+  },
+
+  splitPdf: async (sessionId, fileId, mode = 'individual', options = {}) => {
+    const response = await api.post('/split', { session_id: sessionId, file_id: fileId, mode, ...options }, { timeout: 120000 });
+    return response.data;
+  },
+
+  imageToPath: async (files, sessionId, outputFilename = 'images.pdf', onProgress) => {
+    const formData = new FormData();
+    formData.append('session_id', sessionId);
+    formData.append('output_filename', outputFilename);
+    files.forEach((file) => formData.append('files', file));
+    const response = await api.post('/image-to-pdf', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 120000,
+      onUploadProgress: onProgress ? (e) => onProgress(Math.round((e.loaded * 100) / (e.total || 1))) : undefined,
+    });
+    return response.data;
+  },
+
+  reorderPdf: async (sessionId, fileId, pageOrder) => {
+    const response = await api.post('/reorder', { session_id: sessionId, file_id: fileId, page_order: pageOrder }, { timeout: 60000 });
+    return response.data;
+  },
+
+  deletePages: async (sessionId, fileId, pages) => {
+    const response = await api.post('/delete-pages', { session_id: sessionId, file_id: fileId, pages }, { timeout: 60000 });
+    return response.data;
+  },
 };
 
 export default api;

@@ -16,6 +16,7 @@ from config import Config
 from app.routes.upload import upload_bp
 from app.routes.preview import preview_bp
 from app.routes.merge import merge_bp
+from app.routes.tools import tools_bp
 from app.services.file_manager import FileManager
 from app.models.schemas import HealthResponse
 from app.utils.middleware import add_request_id, log_request_time, get_request_id
@@ -98,6 +99,7 @@ app.config['start_time'] = time.time()
 app.register_blueprint(upload_bp, url_prefix='/api')
 app.register_blueprint(preview_bp, url_prefix='/api')
 app.register_blueprint(merge_bp, url_prefix='/api')
+app.register_blueprint(tools_bp, url_prefix='/api')
 
 
 # Add middleware for request tracking

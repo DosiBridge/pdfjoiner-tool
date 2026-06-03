@@ -26,8 +26,13 @@ import HowToCombineCvCertificatesPage from './pages/blog/HowToCombineCvCertifica
 import HowToMergePdfOnMobilePage from './pages/blog/HowToMergePdfOnMobilePage';
 import HowToReorderPdfPage from './pages/blog/HowToReorderPdfPage';
 
-// Related tool placeholders
-import ComingSoonToolPage from './pages/ComingSoonToolPage';
+// Related tool pages
+import CompressPdfPage from './pages/CompressPdfPage';
+import SplitPdfPage from './pages/SplitPdfPage';
+import ImageToPdfPage from './pages/ImageToPdfPage';
+import JpgToPdfPage from './pages/JpgToPdfPage';
+import ReorderPdfPage from './pages/ReorderPdfPage';
+import DeletePdfPagesPage from './pages/DeletePdfPagesPage';
 
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -60,65 +65,13 @@ function App() {
         <Route path="/blog/how-to-merge-pdf-on-mobile" element={<HowToMergePdfOnMobilePage />} />
         <Route path="/blog/how-to-reorder-pdf-before-merging" element={<HowToReorderPdfPage />} />
 
-        {/* Cluster: Related tools (coming soon — SEO placeholders) */}
-        <Route path="/compress-pdf" element={
-          <ComingSoonToolPage
-            title="Compress PDF Online"
-            seoTitle="Compress PDF — Reduce PDF File Size Online Free | DOSIBridge"
-            description="Reduce PDF file size without losing quality. Compress large PDFs for email, upload, or storage. Free online PDF compressor — coming soon."
-            path="/compress-pdf"
-            keywords="compress PDF, reduce PDF size, PDF compressor, shrink PDF, make PDF smaller, compress PDF online free"
-            relatedText="While we build the compressor, you can merge your PDFs to combine multiple smaller files into one organized document."
-          />
-        } />
-        <Route path="/split-pdf" element={
-          <ComingSoonToolPage
-            title="Split PDF Online"
-            seoTitle="Split PDF — Extract Pages from PDF Online Free | DOSIBridge"
-            description="Split a PDF into separate files or extract specific pages. Free online PDF splitter — coming soon to DOSIBridge."
-            path="/split-pdf"
-            keywords="split PDF, extract PDF pages, PDF splitter, split PDF online, separate PDF pages, break apart PDF"
-            relatedText="Need to select specific pages from a PDF? You can already do this with our merge tool — upload a PDF, select only the pages you want, and merge them into a new file."
-          />
-        } />
-        <Route path="/image-to-pdf" element={
-          <ComingSoonToolPage
-            title="Image to PDF Converter"
-            seoTitle="Image to PDF — Convert Images to PDF Online Free | DOSIBridge"
-            description="Convert JPG, PNG, and other images to PDF format. Free online image to PDF converter — coming soon to DOSIBridge."
-            path="/image-to-pdf"
-            keywords="image to PDF, convert image to PDF, JPG to PDF, PNG to PDF, photo to PDF, image to PDF converter"
-          />
-        } />
-        <Route path="/jpg-to-pdf" element={
-          <ComingSoonToolPage
-            title="JPG to PDF Converter"
-            seoTitle="JPG to PDF — Convert JPEG Images to PDF Free | DOSIBridge"
-            description="Convert JPG and JPEG images to PDF documents. Combine multiple photos into one PDF. Free online — coming soon to DOSIBridge."
-            path="/jpg-to-pdf"
-            keywords="JPG to PDF, JPEG to PDF, convert JPG to PDF, photo to PDF, multiple JPG to PDF, JPG to PDF converter"
-          />
-        } />
-        <Route path="/reorder-pdf" element={
-          <ComingSoonToolPage
-            title="Reorder PDF Pages"
-            seoTitle="Reorder PDF Pages — Rearrange PDF Online Free | DOSIBridge"
-            description="Rearrange pages in a PDF document by dragging and dropping. Free online PDF page reorderer — coming soon as a standalone tool."
-            path="/reorder-pdf"
-            keywords="reorder PDF pages, rearrange PDF, PDF page reorder, move PDF pages, reorganize PDF, sort PDF pages"
-            relatedText="You can already reorder PDF pages with our merge tool. Upload your PDF, select pages, drag them into order, and merge into a new file."
-          />
-        } />
-        <Route path="/delete-pdf-pages" element={
-          <ComingSoonToolPage
-            title="Delete Pages from PDF"
-            seoTitle="Delete PDF Pages — Remove Pages from PDF Online Free | DOSIBridge"
-            description="Remove unwanted pages from a PDF document. Free online PDF page remover — coming soon to DOSIBridge."
-            path="/delete-pdf-pages"
-            keywords="delete PDF pages, remove pages from PDF, PDF page remover, remove PDF pages online, delete page from PDF free"
-            relatedText="You can already remove pages with our merge tool. Upload your PDF, select only the pages you want to keep, and merge them into a new file without the unwanted pages."
-          />
-        } />
+        {/* Cluster: Related PDF tools (fully working) */}
+        <Route path="/compress-pdf" element={<CompressPdfPage />} />
+        <Route path="/split-pdf" element={<SplitPdfPage />} />
+        <Route path="/image-to-pdf" element={<ImageToPdfPage />} />
+        <Route path="/jpg-to-pdf" element={<JpgToPdfPage />} />
+        <Route path="/reorder-pdf" element={<ReorderPdfPage />} />
+        <Route path="/delete-pdf-pages" element={<DeletePdfPagesPage />} />
 
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
