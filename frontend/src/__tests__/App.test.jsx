@@ -78,16 +78,29 @@ describe('App Routing', () => {
     expect(screen.getByText('How to Reorder PDF Pages Before Merging')).toBeInTheDocument();
   });
 
-  it('renders coming soon pages with placeholder', () => {
+  it('renders compress-pdf tool page', () => {
     renderWithRouter(<App />, { route: '/compress-pdf' });
-    expect(screen.getByText('Coming Soon')).toBeInTheDocument();
     expect(screen.getByText('Compress PDF Online')).toBeInTheDocument();
   });
 
-  it('renders split-pdf coming soon page', () => {
+  it('renders split-pdf tool page', () => {
     renderWithRouter(<App />, { route: '/split-pdf' });
-    expect(screen.getByText('Coming Soon')).toBeInTheDocument();
     expect(screen.getByText('Split PDF Online')).toBeInTheDocument();
+  });
+
+  it('renders image-to-pdf tool page', () => {
+    renderWithRouter(<App />, { route: '/image-to-pdf' });
+    expect(screen.getByText('Image to PDF Converter')).toBeInTheDocument();
+  });
+
+  it('renders reorder-pdf tool page', () => {
+    renderWithRouter(<App />, { route: '/reorder-pdf' });
+    expect(screen.getByText('Reorder PDF Pages')).toBeInTheDocument();
+  });
+
+  it('renders delete-pdf-pages tool page', () => {
+    renderWithRouter(<App />, { route: '/delete-pdf-pages' });
+    expect(screen.getByText('Delete Pages from PDF')).toBeInTheDocument();
   });
 
   // Verify layout is always present

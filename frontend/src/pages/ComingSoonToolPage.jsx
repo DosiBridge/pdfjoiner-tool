@@ -6,7 +6,7 @@ import SEOHead from '../components/SEOHead';
 function ComingSoonToolPage({ title, seoTitle, description, path, keywords, relatedText }) {
   return (
     <>
-      <SEOHead title={seoTitle} description={description} path={path} keywords={keywords} />
+      <SEOHead title={seoTitle} description={description} path={path} keywords={keywords} noindex />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 text-center">
