@@ -27,7 +27,7 @@ describe('Layout', () => {
 
   it('renders footer with PDF tools links', () => {
     renderWithRouter(<Layout><div /></Layout>);
-    expect(screen.getByText('PDF Merge Tools')).toBeInTheDocument();
+    expect(screen.getByText('PDF Tools')).toBeInTheDocument();
     expect(screen.getByText('Merge PDF')).toBeInTheDocument();
     expect(screen.getByText('PDF Joiner')).toBeInTheDocument();
   });
@@ -40,7 +40,7 @@ describe('Layout', () => {
 
   it('renders footer with guide links', () => {
     renderWithRouter(<Layout><div /></Layout>);
-    expect(screen.getByText('How-To Guides')).toBeInTheDocument();
+    expect(screen.getByText('Guides')).toBeInTheDocument();
     expect(screen.getByText('How to Merge PDFs')).toBeInTheDocument();
   });
 

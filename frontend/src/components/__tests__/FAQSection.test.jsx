@@ -25,28 +25,32 @@ describe('FAQSection', () => {
     expect(screen.getByText('Does it add watermarks?')).toBeInTheDocument();
   });
 
-  it('does not show answers initially', () => {
+  it('answers are hidden (collapsed) initially', () => {
     renderWithRouter(<FAQSection items={mockItems} />);
-    expect(screen.queryByText('Yes, completely free.')).not.toBeInTheDocument();
+    // With CSS grid animation the text is in the DOM but visually hidden
+    const btn = screen.getByText('Is this free?').closest('button');
+    expect(btn).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('shows answer when question is clicked', async () => {
+  it('expands answer when question is clicked', async () => {
     const user = userEvent.setup();
     renderWithRouter(<FAQSection items={mockItems} />);
 
-    await user.click(screen.getByText('Is this free?'));
-    expect(screen.getByText('Yes, completely free.')).toBeInTheDocument();
+    const btn = screen.getByText('Is this free?').closest('button');
+    await user.click(btn);
+    expect(btn).toHaveAttribute('aria-expanded', 'true');
   });
 
-  it('hides answer when clicked again', async () => {
+  it('collapses answer when clicked again', async () => {
     const user = userEvent.setup();
     renderWithRouter(<FAQSection items={mockItems} />);
 
-    await user.click(screen.getByText('Is this free?'));
-    expect(screen.getByText('Yes, completely free.')).toBeInTheDocument();
+    const btn = screen.getByText('Is this free?').closest('button');
+    await user.click(btn);
+    expect(btn).toHaveAttribute('aria-expanded', 'true');
 
-    await user.click(screen.getByText('Is this free?'));
-    expect(screen.queryByText('Yes, completely free.')).not.toBeInTheDocument();
+    await user.click(btn);
+    expect(btn).toHaveAttribute('aria-expanded', 'false');
   });
 
   it('renders with empty items array', () => {
