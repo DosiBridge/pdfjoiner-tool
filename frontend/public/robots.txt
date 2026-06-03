@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pdfjoiner.dosibridge.com/sitemap.xml

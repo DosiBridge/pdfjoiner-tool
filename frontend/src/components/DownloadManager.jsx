@@ -56,7 +56,7 @@ const DownloadManager = ({ jobId, onComplete }) => {
       <div className="space-y-3 sm:space-y-4">
         {status === 'processing' && (
           <div className="flex items-center space-x-2 sm:space-x-3 text-primary-600">
-            <Loader className="w-5 h-5 sm:w-6 sm:h-6 animate-spin flex-shrink-0" />
+            <Loader aria-hidden="true" className="w-5 h-5 sm:w-6 sm:h-6 animate-spin flex-shrink-0" />
             <div className="min-w-0">
               <p className="font-semibold text-sm sm:text-base">Processing...</p>
               <p className="text-xs sm:text-sm text-gray-600">Merging your PDFs</p>
@@ -67,7 +67,7 @@ const DownloadManager = ({ jobId, onComplete }) => {
         {status === 'completed' && jobInfo && (
           <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center space-x-2 sm:space-x-3 text-green-600">
-              <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
+              <CheckCircle aria-hidden="true" className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
               <div className="min-w-0 flex-1">
                 <p className="font-semibold text-sm sm:text-base">Ready to download!</p>
                 <p className="text-xs sm:text-sm text-gray-600">
@@ -80,7 +80,7 @@ const DownloadManager = ({ jobId, onComplete }) => {
               onClick={handleDownload}
               className="w-full btn btn-primary flex items-center justify-center space-x-2 py-2.5 sm:py-3 text-sm sm:text-base"
             >
-              <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Download aria-hidden="true" className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="truncate">Download {jobInfo.output_filename}</span>
             </button>
           </div>
@@ -88,7 +88,7 @@ const DownloadManager = ({ jobId, onComplete }) => {
 
         {status === 'failed' && (
           <div className="flex items-center space-x-2 sm:space-x-3 text-red-600">
-            <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
+            <AlertCircle aria-hidden="true" className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
             <div className="min-w-0">
               <p className="font-semibold text-sm sm:text-base">Merge failed</p>
               <p className="text-xs sm:text-sm text-gray-600 break-words">

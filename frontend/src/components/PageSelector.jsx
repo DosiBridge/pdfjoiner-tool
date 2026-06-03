@@ -252,7 +252,7 @@ const PageSelector = ({ file, sessionId, selectedPages, onSelectionChange }) => 
   if (loading && thumbnails.length === 0) {
     return (
       <div className="flex items-center justify-center py-8 sm:py-12">
-        <Loader className="w-6 h-6 sm:w-8 sm:h-8 animate-spin text-primary-600" />
+        <Loader aria-hidden="true" className="w-6 h-6 sm:w-8 sm:h-8 animate-spin text-primary-600" />
         <span className="ml-2 sm:ml-3 text-sm sm:text-base text-gray-600">Loading page previews...</span>
       </div>
     );
@@ -270,7 +270,7 @@ const PageSelector = ({ file, sessionId, selectedPages, onSelectionChange }) => 
             onClick={handleSelectAll}
             className="flex items-center justify-center xs:justify-start space-x-2 px-3 sm:px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm sm:text-base"
           >
-            {selectAll ? <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Square className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+            {selectAll ? <Check aria-hidden="true" className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Square aria-hidden="true" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
             <span className="whitespace-nowrap">{selectAll ? 'Deselect All' : 'Select All'}</span>
           </button>
 
@@ -296,8 +296,10 @@ const PageSelector = ({ file, sessionId, selectedPages, onSelectionChange }) => 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
             title="Grid view"
+            aria-label="Grid view"
+            aria-pressed={viewMode === 'grid'}
           >
-            <Grid3x3 className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Grid3x3 aria-hidden="true" className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button
             onClick={() => setViewMode('list')}
@@ -307,8 +309,10 @@ const PageSelector = ({ file, sessionId, selectedPages, onSelectionChange }) => 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
             title="List view"
+            aria-label="List view"
+            aria-pressed={viewMode === 'list'}
           >
-            <List className="w-4 h-4 sm:w-5 sm:h-5" />
+            <List aria-hidden="true" className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
@@ -348,6 +352,11 @@ const PageSelector = ({ file, sessionId, selectedPages, onSelectionChange }) => 
             <div
               key={thumbnail.page_number}
               onClick={() => handlePageToggle(thumbnail.page_number)}
+              role="checkbox"
+              aria-checked={isSelected}
+              aria-label={`Page ${thumbnail.page_number}`}
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); handlePageToggle(thumbnail.page_number); } }}
               className={`
                 page-thumbnail relative cursor-pointer rounded-lg border-2 overflow-hidden
                 transition-all duration-200
@@ -361,7 +370,7 @@ const PageSelector = ({ file, sessionId, selectedPages, onSelectionChange }) => 
                 transition-all duration-200
                 ${isSelected ? 'bg-primary-600 text-white' : 'bg-white border-2 border-gray-300'}
               `}>
-                {isSelected && <Check className="w-3 h-3 sm:w-4 sm:h-4" />}
+                {isSelected && <Check aria-hidden="true" className="w-3 h-3 sm:w-4 sm:h-4" />}
               </div>
 
               {/* Thumbnail */}

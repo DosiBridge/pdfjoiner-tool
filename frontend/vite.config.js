@@ -35,7 +35,15 @@ export default defineConfig({
   },
   build: {
     outDir: process.env.VITE_BUILD_DIR || 'dist',
-    sourcemap: true
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          dnd: ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
+        },
+      },
+    },
   },
   // Define environment variables that will be available in the app
   define: {

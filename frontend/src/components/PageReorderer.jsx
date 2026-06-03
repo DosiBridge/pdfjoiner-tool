@@ -49,8 +49,9 @@ const SortableItem = ({ page, index, onRemove, sessionId }) => {
         {...attributes}
         {...listeners}
         className="cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 flex-shrink-0"
+        aria-label={`Drag to reorder page ${page.pageNumber} from ${page.filename}`}
       >
-        <GripVertical className="w-4 h-4 sm:w-5 sm:h-5" />
+        <GripVertical aria-hidden="true" className="w-4 h-4 sm:w-5 sm:h-5" />
       </div>
 
       {/* Order number */}
@@ -62,7 +63,7 @@ const SortableItem = ({ page, index, onRemove, sessionId }) => {
       <div className="w-12 h-16 sm:w-14 sm:h-18 md:w-16 md:h-20 flex-shrink-0">
         <img
           src={pdfAPI.getThumbnailUrl(sessionId, page.fileId, page.pageNumber)}
-          alt={`Page ${page.pageNumber}`}
+          alt={`Page ${page.pageNumber} of ${page.filename}`}
           className="w-full h-full object-cover rounded border border-gray-200"
         />
       </div>
@@ -83,8 +84,9 @@ const SortableItem = ({ page, index, onRemove, sessionId }) => {
           onClick={() => onRemove(index)}
           className="p-1.5 sm:p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
           title="Remove page"
+          aria-label={`Remove page ${page.pageNumber} from ${page.filename}`}
         >
-          <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <Trash2 aria-hidden="true" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
       </div>
     </div>
@@ -122,7 +124,7 @@ const PageReorderer = ({ pages, onReorder, onRemove, sessionId }) => {
   if (pages.length === 0) {
     return (
       <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
-        <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+        <FileText aria-hidden="true" className="w-16 h-16 mx-auto mb-4 text-gray-300" />
         <p className="text-lg font-medium text-gray-600">No pages selected</p>
         <p className="text-sm text-gray-500 mt-1">
           Select pages from your PDFs to reorder them
