@@ -35,6 +35,7 @@ function MergePdfOnlineFreePage() {
         description="Merge PDF files online for free with no daily limits, no account required, and no watermarks. Upload, reorder, and download your merged PDF instantly."
         path="/merge-pdf-online-free"
         keywords="merge PDF online free, free PDF merger, merge PDF free no limit, merge PDF without signup, free online PDF merge tool"
+        faqItems={faqItems}
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">

@@ -35,6 +35,7 @@ function MergeUniversityDocumentsPage() {
         description="Combine university transcripts, degree certificates, recommendation letters, and application forms into one PDF. Free, secure, and ready for submission."
         path="/merge-university-documents-pdf"
         keywords="merge university documents PDF, combine transcripts PDF, merge academic documents, university application PDF, merge degree certificates, combine school documents"
+        faqItems={faqItems}
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">

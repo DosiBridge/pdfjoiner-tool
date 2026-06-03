@@ -45,18 +45,38 @@ function HomePage() {
         description="Combine multiple PDF files into one document instantly. Free PDF merger with drag-and-drop reorder, no signup, no watermark, and mobile support."
         path="/"
         keywords="PDF joiner, merge PDF, combine PDF files, PDF merger online, free PDF tool, join PDF, merge PDF pages, reorder PDF, merge PDF no watermark"
+        faqItems={faqItems}
       />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">
-        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+      <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-12 md:py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-3 sm:mb-4 leading-tight">
             Merge PDF Files Online for Free
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed">
             Combine multiple PDF documents into one clean file. Drag-and-drop reorder, page selection,
             no signup, no watermark — works on desktop and mobile.
           </p>
+          {/* Trust badges */}
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm text-gray-500">
+            <span className="flex items-center space-x-1.5 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+              <span className="w-2 h-2 bg-green-500 rounded-full" />
+              <span>100% Free</span>
+            </span>
+            <span className="flex items-center space-x-1.5 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+              <span className="w-2 h-2 bg-green-500 rounded-full" />
+              <span>No Signup</span>
+            </span>
+            <span className="flex items-center space-x-1.5 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+              <span className="w-2 h-2 bg-green-500 rounded-full" />
+              <span>No Watermark</span>
+            </span>
+            <span className="flex items-center space-x-1.5 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+              <span className="w-2 h-2 bg-green-500 rounded-full" />
+              <span>Mobile Ready</span>
+            </span>
+          </div>
         </div>
       </section>
 

@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 
 const BASE_URL = 'https://pdfjoiner.dosibridge.com';
 
-function SEOHead({ title, description, path = '/', keywords }) {
+function SEOHead({ title, description, path = '/', keywords, faqItems }) {
   useEffect(() => {
     document.title = title;
 
     const setMeta = (attr, attrValue, content) => {
-      let el = document.querySelector(`meta[${attr}="${attrValue}"]`);
+      const el = document.querySelector(`meta[${attr}="${attrValue}"]`);
       if (el) {
         el.setAttribute('content', content);
       }
@@ -21,7 +21,7 @@ function SEOHead({ title, description, path = '/', keywords }) {
     }
 
     // Update canonical
-    let canonical = document.querySelector('link[rel="canonical"]');
+    const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
       canonical.setAttribute('href', canonicalUrl);
     }
@@ -34,7 +34,41 @@ function SEOHead({ title, description, path = '/', keywords }) {
     // Twitter
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', description);
-  }, [title, description, path, keywords]);
+
+    // Inject FAQPage structured data if FAQ items provided
+    const existingFaqScript = document.getElementById('faq-structured-data');
+    if (existingFaqScript) {
+      existingFaqScript.remove();
+    }
+
+    if (faqItems && faqItems.length > 0) {
+      const faqSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqItems.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+          },
+        })),
+      };
+
+      const script = document.createElement('script');
+      script.id = 'faq-structured-data';
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify(faqSchema);
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      const script = document.getElementById('faq-structured-data');
+      if (script) {
+        script.remove();
+      }
+    };
+  }, [title, description, path, keywords, faqItems]);
 
   return null;
 }

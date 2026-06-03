@@ -3,6 +3,7 @@ import {
     DndContext,
     KeyboardSensor,
     PointerSensor,
+    TouchSensor,
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
@@ -95,7 +96,12 @@ const SortableItem = ({ page, index, onRemove, sessionId }) => {
 
 const PageReorderer = ({ pages, onReorder, onRemove, sessionId }) => {
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 150, tolerance: 5 },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -123,10 +129,10 @@ const PageReorderer = ({ pages, onReorder, onRemove, sessionId }) => {
 
   if (pages.length === 0) {
     return (
-      <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
-        <FileText aria-hidden="true" className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-        <p className="text-lg font-medium text-gray-600">No pages selected</p>
-        <p className="text-sm text-gray-500 mt-1">
+      <div className="text-center py-8 sm:py-12 border-2 border-dashed border-gray-300 rounded-lg">
+        <FileText aria-hidden="true" className="w-10 h-10 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-300" />
+        <p className="text-base sm:text-lg font-medium text-gray-600">No pages selected</p>
+        <p className="text-xs sm:text-sm text-gray-500 mt-1 px-4">
           Select pages from your PDFs to reorder them
         </p>
       </div>

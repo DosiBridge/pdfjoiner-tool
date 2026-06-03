@@ -57,7 +57,7 @@ function PdfTool() {
 
   const handleFilesSelected = async (files) => {
     setIsUploading(true);
-    setUploadProgress(1); // Start with 1% to show progress bar immediately
+    setUploadProgress(1);
     try {
       const response = await pdfAPI.uploadFiles(
         files,
@@ -201,8 +201,8 @@ function PdfTool() {
     <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
         {/* Left column - Upload & File List */}
-        <div className="lg:col-span-1 space-y-4 sm:space-y-5 md:space-y-6 order-2 lg:order-1">
-          <div className="card p-4 sm:p-5 md:p-6">
+        <div className="lg:col-span-1 space-y-4 sm:space-y-5 md:space-y-6 order-1 lg:order-1">
+          <div className="card p-3 sm:p-4 md:p-6">
             <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center space-x-2">
               <UploadIcon aria-hidden="true" className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>Upload PDFs</span>
@@ -215,23 +215,25 @@ function PdfTool() {
             />
           </div>
 
-          <div className="card p-4 sm:p-5 md:p-6">
-            <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
-              Uploaded Files ({uploadedFiles.length})
-            </h2>
-            <FileList
-              files={uploadedFiles}
-              onDeleteFile={handleDeleteFile}
-              onSelectFile={setSelectedFileId}
-              selectedFileId={selectedFileId}
-            />
-          </div>
+          {uploadedFiles.length > 0 && (
+            <div className="card p-3 sm:p-4 md:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
+                Uploaded Files ({uploadedFiles.length})
+              </h2>
+              <FileList
+                files={uploadedFiles}
+                onDeleteFile={handleDeleteFile}
+                onSelectFile={setSelectedFileId}
+                selectedFileId={selectedFileId}
+              />
+            </div>
+          )}
         </div>
 
-        {/* Middle column - Page Selection */}
-        <div className="lg:col-span-2 space-y-4 sm:space-y-5 md:space-y-6 order-1 lg:order-2">
+        {/* Right column - Page Selection & Merge */}
+        <div className="lg:col-span-2 space-y-4 sm:space-y-5 md:space-y-6 order-2 lg:order-2">
           {selectedFile && (
-            <div className="card p-4 sm:p-5 md:p-6">
+            <div className="card p-3 sm:p-4 md:p-6">
               <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
                 <span className="block sm:inline">Select Pages</span>
                 <span className="block text-sm sm:text-base text-gray-600 sm:ml-2 mt-1 sm:mt-0 sm:inline truncate">
@@ -247,14 +249,16 @@ function PdfTool() {
             </div>
           )}
 
-          <div className="card p-4 sm:p-5 md:p-6">
-            <PageReorderer
-              pages={orderedPages}
-              onReorder={handlePageReorder}
-              onRemove={handleRemovePage}
-              sessionId={sessionId}
-            />
-          </div>
+          {orderedPages.length > 0 && (
+            <div className="card p-3 sm:p-4 md:p-6">
+              <PageReorderer
+                pages={orderedPages}
+                onReorder={handlePageReorder}
+                onRemove={handleRemovePage}
+                sessionId={sessionId}
+              />
+            </div>
+          )}
 
           {orderedPages.length > 0 && (
             <>

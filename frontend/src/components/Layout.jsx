@@ -50,12 +50,12 @@ function Layout({ children }) {
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 mt-8 sm:mt-10 md:mt-12">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6">
+          <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-6">
             {/* PDF Merge Tools */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3">PDF Merge Tools</h3>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-2 sm:mb-3">PDF Merge Tools</h3>
               <nav aria-label="PDF Merge Tools">
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-gray-600">
                   <li><Link to="/merge-pdf" className="hover:text-primary-600 transition-colors">Merge PDF</Link></li>
                   <li><Link to="/pdf-joiner" className="hover:text-primary-600 transition-colors">PDF Joiner</Link></li>
                   <li><Link to="/combine-pdf-files" className="hover:text-primary-600 transition-colors">Combine PDF Files</Link></li>
@@ -67,9 +67,9 @@ function Layout({ children }) {
 
             {/* Use Cases */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3">Use Cases</h3>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-2 sm:mb-3">Use Cases</h3>
               <nav aria-label="Use Cases">
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-gray-600">
                   <li><Link to="/merge-pdf-on-mobile" className="hover:text-primary-600 transition-colors">Merge on Mobile</Link></li>
                   <li><Link to="/merge-pdf-for-job-application" className="hover:text-primary-600 transition-colors">Job Applications</Link></li>
                   <li><Link to="/combine-cv-and-certificates-pdf" className="hover:text-primary-600 transition-colors">CV + Certificates</Link></li>
@@ -81,9 +81,9 @@ function Layout({ children }) {
 
             {/* Guides */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3">How-To Guides</h3>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-2 sm:mb-3">How-To Guides</h3>
               <nav aria-label="How-To Guides">
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-gray-600">
                   <li><Link to="/blog/how-to-merge-pdf-files-online" className="hover:text-primary-600 transition-colors">How to Merge PDFs</Link></li>
                   <li><Link to="/blog/how-to-combine-cv-certificates-into-one-pdf" className="hover:text-primary-600 transition-colors">How to Combine CV + Certs</Link></li>
                   <li><Link to="/blog/how-to-merge-pdf-on-mobile" className="hover:text-primary-600 transition-colors">How to Merge on Mobile</Link></li>
@@ -94,9 +94,9 @@ function Layout({ children }) {
 
             {/* More Tools + DOSIBridge */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3">More PDF Tools</h3>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-2 sm:mb-3">More PDF Tools</h3>
               <nav aria-label="More PDF Tools">
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-gray-600">
                   <li><Link to="/compress-pdf" className="hover:text-primary-600 transition-colors">Compress PDF</Link></li>
                   <li><Link to="/split-pdf" className="hover:text-primary-600 transition-colors">Split PDF</Link></li>
                   <li><Link to="/image-to-pdf" className="hover:text-primary-600 transition-colors">Image to PDF</Link></li>
@@ -105,9 +105,9 @@ function Layout({ children }) {
                 </ul>
               </nav>
 
-              <h3 className="text-sm font-semibold text-gray-900 mt-5 mb-3">DOSIBridge</h3>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mt-4 sm:mt-5 mb-2 sm:mb-3">DOSIBridge</h3>
               <nav aria-label="DOSIBridge links">
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-gray-600">
                   <li><a href="https://dosibridge.com" className="hover:text-primary-600 transition-colors">Homepage</a></li>
                   <li><a href="https://dosibridge.com/projects" className="hover:text-primary-600 transition-colors">All Projects</a></li>
                   <li><a href="https://sd.dosibridge.com" className="hover:text-primary-600 transition-colors">SD Tools</a></li>
