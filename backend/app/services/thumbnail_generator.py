@@ -43,36 +43,55 @@ class ThumbnailGenerator:
         quality = quality or Config.THUMBNAIL_QUALITY
         
         try:
-            # Convert specific page to image
+            # Convert specific page to image with MAXIMUM speed optimization
+            # Use lower DPI and faster settings for speed
             images = convert_from_path(
                 str(pdf_path),
                 first_page=page_number,
                 last_page=page_number,
-                dpi=72,  # Lower DPI for faster generation
-                fmt='jpeg'
+                dpi=72,  # Lower DPI for faster generation (still good quality for thumbnails)
+                fmt='jpeg',
+                thread_count=1,  # Single thread for stability
+                strict=False,  # Don't fail on minor PDF issues
+                use_pdftocairo=False,  # Faster conversion
+                poppler_path=None  # Use system poppler
             )
             
-            if not images:
-                logger.error(f"No image generated for page {page_number}")
+            if not images or len(images) == 0:
+                logger.error(f"No image generated for page {page_number} from {pdf_path}")
                 return False
             
             # Get the image
             image = images[0]
             
-            # Create thumbnail
-            image.thumbnail((size, size), Image.Resampling.LANCZOS)
+            # Verify image is valid
+            if not image or image.size[0] == 0 or image.size[1] == 0:
+                logger.error(f"Invalid image size for page {page_number}")
+                return False
+            
+            # Create thumbnail maintaining aspect ratio - use fastest resampling
+            image.thumbnail((size, size), Image.Resampling.NEAREST)  # Fastest resampling for speed
             
             # Ensure output directory exists
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
-            # Save thumbnail
-            image.save(str(output_path), 'JPEG', quality=quality, optimize=True)
+            # Save thumbnail with error handling - optimized for speed
+            try:
+                image.save(str(output_path), 'JPEG', quality=quality, optimize=False)  # Skip optimization for speed
+            except Exception as save_error:
+                logger.error(f"Failed to save thumbnail for page {page_number}: {save_error}")
+                return False
             
-            logger.debug(f"Generated thumbnail for page {page_number}: {output_path}")
+            # Verify file was created
+            if not output_path.exists() or output_path.stat().st_size == 0:
+                logger.error(f"Thumbnail file not created or empty for page {page_number}")
+                return False
+            
+            logger.debug(f"Generated thumbnail for page {page_number}: {output_path} ({output_path.stat().st_size} bytes)")
             return True
             
         except Exception as e:
-            logger.error(f"Error generating thumbnail for page {page_number}: {e}")
+            logger.error(f"Error generating thumbnail for page {page_number}: {e}", exc_info=True)
             return False
     
     @staticmethod

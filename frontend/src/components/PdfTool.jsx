@@ -26,6 +26,7 @@ function PdfTool() {
   });
   const [jobId, setJobId] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [isMerging, setIsMerging] = useState(false);
 
   useEffect(() => {
@@ -56,8 +57,20 @@ function PdfTool() {
 
   const handleFilesSelected = async (files) => {
     setIsUploading(true);
+    setUploadProgress(1);
     try {
-      const response = await pdfAPI.uploadFiles(files, sessionId);
+      const response = await pdfAPI.uploadFiles(
+        files,
+        sessionId,
+        (progress) => {
+          const clampedProgress = Math.max(0, Math.min(100, progress));
+          setUploadProgress(clampedProgress);
+        }
+      );
+
+      setUploadProgress(100);
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       if (response.uploaded_files && response.uploaded_files.length > 0) {
         setUploadedFiles((prev) => [...prev, ...response.uploaded_files]);
         toast.success(`${response.uploaded_files.length} file(s) uploaded successfully`);
@@ -72,9 +85,22 @@ function PdfTool() {
       }
     } catch (error) {
       console.error('Upload error:', error);
-      toast.error('Failed to upload files');
+      let errorMessage = 'Failed to upload files';
+      if (error.formattedMessage) {
+        errorMessage = error.formattedMessage;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      toast.error(errorMessage);
     } finally {
-      setIsUploading(false);
+      setTimeout(() => {
+        setIsUploading(false);
+        setUploadProgress(0);
+      }, 500);
     }
   };
 
@@ -141,7 +167,17 @@ function PdfTool() {
       toast.success('PDFs merged successfully!');
     } catch (error) {
       console.error('Merge error:', error);
-      toast.error('Failed to merge PDFs');
+      let errorMessage = 'Failed to merge PDFs';
+      if (error.formattedMessage) {
+        errorMessage = error.formattedMessage;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      toast.error(errorMessage);
     } finally {
       setIsMerging(false);
     }
@@ -165,8 +201,8 @@ function PdfTool() {
     <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
         {/* Left column - Upload & File List */}
-        <div className="lg:col-span-1 space-y-4 sm:space-y-5 md:space-y-6 order-2 lg:order-1">
-          <div className="card p-4 sm:p-5 md:p-6">
+        <div className="lg:col-span-1 space-y-4 sm:space-y-5 md:space-y-6 order-1 lg:order-1">
+          <div className="card p-3 sm:p-4 md:p-6">
             <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center space-x-2">
               <UploadIcon aria-hidden="true" className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>Upload PDFs</span>
@@ -174,26 +210,30 @@ function PdfTool() {
             <FileUploader
               onFilesSelected={handleFilesSelected}
               existingFilesCount={uploadedFiles.length}
+              isUploading={isUploading}
+              uploadProgress={uploadProgress}
             />
           </div>
 
-          <div className="card p-4 sm:p-5 md:p-6">
-            <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
-              Uploaded Files ({uploadedFiles.length})
-            </h2>
-            <FileList
-              files={uploadedFiles}
-              onDeleteFile={handleDeleteFile}
-              onSelectFile={setSelectedFileId}
-              selectedFileId={selectedFileId}
-            />
-          </div>
+          {uploadedFiles.length > 0 && (
+            <div className="card p-3 sm:p-4 md:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
+                Uploaded Files ({uploadedFiles.length})
+              </h2>
+              <FileList
+                files={uploadedFiles}
+                onDeleteFile={handleDeleteFile}
+                onSelectFile={setSelectedFileId}
+                selectedFileId={selectedFileId}
+              />
+            </div>
+          )}
         </div>
 
-        {/* Middle column - Page Selection */}
-        <div className="lg:col-span-2 space-y-4 sm:space-y-5 md:space-y-6 order-1 lg:order-2">
+        {/* Right column - Page Selection & Merge */}
+        <div className="lg:col-span-2 space-y-4 sm:space-y-5 md:space-y-6 order-2 lg:order-2">
           {selectedFile && (
-            <div className="card p-4 sm:p-5 md:p-6">
+            <div className="card p-3 sm:p-4 md:p-6">
               <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
                 <span className="block sm:inline">Select Pages</span>
                 <span className="block text-sm sm:text-base text-gray-600 sm:ml-2 mt-1 sm:mt-0 sm:inline truncate">
@@ -209,14 +249,16 @@ function PdfTool() {
             </div>
           )}
 
-          <div className="card p-4 sm:p-5 md:p-6">
-            <PageReorderer
-              pages={orderedPages}
-              onReorder={handlePageReorder}
-              onRemove={handleRemovePage}
-              sessionId={sessionId}
-            />
-          </div>
+          {orderedPages.length > 0 && (
+            <div className="card p-3 sm:p-4 md:p-6">
+              <PageReorderer
+                pages={orderedPages}
+                onReorder={handlePageReorder}
+                onRemove={handleRemovePage}
+                sessionId={sessionId}
+              />
+            </div>
+          )}
 
           {orderedPages.length > 0 && (
             <>
