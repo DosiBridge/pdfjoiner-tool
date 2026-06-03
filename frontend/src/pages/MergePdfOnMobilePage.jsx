@@ -35,6 +35,7 @@ function MergePdfOnMobilePage() {
         description="Merge PDF files directly on your phone. Works on iPhone, Android, and tablets. No app download needed — just open your browser, upload PDFs, and merge. Free."
         path="/merge-pdf-on-mobile"
         keywords="merge PDF on mobile, merge PDF iPhone, merge PDF Android, mobile PDF merger, merge PDF on phone, combine PDF mobile, PDF merge app alternative"
+        faqItems={faqItems}
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">

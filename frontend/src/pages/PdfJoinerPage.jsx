@@ -35,6 +35,7 @@ function PdfJoinerPage() {
         description="Join multiple PDF files into one document online. Free PDF joiner with page selection and drag-and-drop reorder. No signup, no watermark, works on all devices."
         path="/pdf-joiner"
         keywords="PDF joiner, join PDF files, joiner PDF, PDF joiner online, free PDF joiner, join PDF, pdf joiner free online, join two PDFs"
+        faqItems={faqItems}
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">

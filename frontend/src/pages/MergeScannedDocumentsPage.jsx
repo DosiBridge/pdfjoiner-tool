@@ -35,6 +35,7 @@ function MergeScannedDocumentsPage() {
         description="Combine scanned documents, receipts, and paper forms into a single PDF. Upload scanned pages, remove blanks, reorder, and download one clean file. Free online."
         path="/merge-scanned-documents-pdf"
         keywords="merge scanned documents PDF, combine scanned pages, merge scanned PDF, combine scans into one PDF, merge scanned receipts, join scanned documents"
+        faqItems={faqItems}
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">

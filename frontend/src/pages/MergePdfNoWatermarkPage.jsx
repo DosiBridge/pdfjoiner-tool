@@ -35,6 +35,7 @@ function MergePdfNoWatermarkPage() {
         description="Merge PDF files online without any watermarks added to your output. DOSIBridge produces clean, professional PDFs with no branding, no signup, and no cost."
         path="/merge-pdf-no-watermark"
         keywords="merge PDF no watermark, PDF merger without watermark, free PDF merge no branding, clean PDF merge, merge PDF without logo, watermark free PDF tool"
+        faqItems={faqItems}
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">

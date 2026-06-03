@@ -35,6 +35,7 @@ function CombineCvCertificatesPage() {
         description="Merge your CV, certificates, diplomas, and credentials into a single professional PDF. Free, no watermark, perfect for job applications and academic submissions."
         path="/combine-cv-and-certificates-pdf"
         keywords="combine CV and certificates PDF, merge CV certificates, combine resume and certificates, merge diploma and CV, combine credentials PDF, CV certificate merger"
+        faqItems={faqItems}
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">

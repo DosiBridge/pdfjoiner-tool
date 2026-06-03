@@ -35,6 +35,7 @@ function MergePdfJobApplicationPage() {
         description="Combine your CV, cover letter, and certificates into one professional PDF for job applications. Free, no watermark, and ready to submit in seconds."
         path="/merge-pdf-for-job-application"
         keywords="merge PDF job application, combine CV cover letter, merge resume PDF, job application PDF, combine application documents, merge CV and certificates"
+        faqItems={faqItems}
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">
