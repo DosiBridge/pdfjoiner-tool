@@ -1,3 +1,4 @@
+import { FileCheck, Lock, Monitor, Shield, Smartphone, Upload, ArrowDown, Layers, MousePointerClick, Settings, Download } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PdfTool from '../components/PdfTool';
@@ -37,6 +38,32 @@ const faqItems = [
   },
 ];
 
+const steps = [
+  { icon: Upload, title: 'Upload PDFs', desc: 'Drag & drop or browse. Up to 20 files, 50 MB each.' },
+  { icon: MousePointerClick, title: 'Select Pages', desc: 'Click to preview. Pick all pages or just the ones you need.' },
+  { icon: Layers, title: 'Reorder', desc: 'Drag pages into any order across all your files.' },
+  { icon: Settings, title: 'Set Options', desc: 'Name your file, add page numbers, watermark, or password.' },
+  { icon: Download, title: 'Download', desc: 'Click merge. Your combined PDF is ready in seconds.' },
+];
+
+const features = [
+  { icon: FileCheck, title: 'No Signup Required', desc: 'Open the page and start merging. No email, no password, no account.' },
+  { icon: Shield, title: 'No Watermark, Ever', desc: 'Your merged PDF is clean and professional. Zero branding added.' },
+  { icon: Lock, title: 'Privacy by Design', desc: 'Files encrypted in transit, auto-deleted after session. Nothing stored.' },
+  { icon: Monitor, title: 'Works on Every Device', desc: 'Desktop, laptop, tablet, phone. Any browser, any OS.' },
+  { icon: Smartphone, title: 'Mobile Optimized', desc: 'Full touch support with drag-and-drop on phones and tablets.' },
+  { icon: Layers, title: 'Page-Level Control', desc: 'Select individual pages from each PDF and arrange them freely.' },
+];
+
+const useCases = [
+  { title: 'Job Applications', desc: 'CV + cover letter + certificates', link: '/merge-pdf-for-job-application' },
+  { title: 'Business Reports', desc: 'Cover pages, charts, and appendices', link: '/merge-pdf' },
+  { title: 'Academic Papers', desc: 'Research, references, supplements', link: '/merge-university-documents-pdf' },
+  { title: 'Scanned Documents', desc: 'Receipts, contracts, forms', link: '/merge-scanned-documents-pdf' },
+  { title: 'CV + Certificates', desc: 'Diplomas and credentials in one file', link: '/combine-cv-and-certificates-pdf' },
+  { title: 'Mobile Merging', desc: 'Merge on iPhone or Android', link: '/merge-pdf-on-mobile' },
+];
+
 function HomePage() {
   return (
     <>
@@ -48,139 +75,185 @@ function HomePage() {
         faqItems={faqItems}
       />
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-3 sm:mb-4 leading-tight">
+      {/* ── Hero ── */}
+      <section className="bg-gradient-to-b from-primary-50 via-primary-50/50 to-white pt-10 pb-6 sm:pt-14 sm:pb-8 md:pt-20 md:pb-10">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
             Merge PDF Files Online for Free
           </h1>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed">
-            Combine multiple PDF documents into one clean file. Drag-and-drop reorder, page selection,
-            no signup, no watermark — works on desktop and mobile.
+          <p className="mt-4 sm:mt-5 text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl mx-auto">
+            Combine multiple PDFs into one clean document. Drag-and-drop reorder, page selection — no signup, no watermark.
           </p>
+
           {/* Trust badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm text-gray-500">
-            <span className="flex items-center space-x-1.5 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
-              <span className="w-2 h-2 bg-green-500 rounded-full" />
-              <span>100% Free</span>
-            </span>
-            <span className="flex items-center space-x-1.5 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
-              <span className="w-2 h-2 bg-green-500 rounded-full" />
-              <span>No Signup</span>
-            </span>
-            <span className="flex items-center space-x-1.5 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
-              <span className="w-2 h-2 bg-green-500 rounded-full" />
-              <span>No Watermark</span>
-            </span>
-            <span className="flex items-center space-x-1.5 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
-              <span className="w-2 h-2 bg-green-500 rounded-full" />
-              <span>Mobile Ready</span>
-            </span>
+          <div className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-2 sm:gap-3">
+            {['100% Free', 'No Signup', 'No Watermark', 'Mobile Ready'].map((badge) => (
+              <span key={badge} className="inline-flex items-center gap-1.5 bg-white text-gray-700 text-xs sm:text-sm font-medium px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0" />
+                {badge}
+              </span>
+            ))}
+          </div>
+
+          {/* Scroll hint */}
+          <div className="mt-8 sm:mt-10 flex justify-center">
+            <ArrowDown className="w-5 h-5 text-gray-400 animate-bounce" />
           </div>
         </div>
       </section>
 
-      {/* Tool */}
-      <PdfTool />
+      {/* ── Tool ── */}
+      <section className="relative -mt-2">
+        <PdfTool />
+      </section>
 
-      {/* SEO Content */}
-      <section className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-10 md:py-12">
-        <article className="prose prose-gray max-w-none">
-
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+      {/* ── How It Works ── */}
+      <section className="bg-white py-12 sm:py-16 md:py-20 border-t border-gray-100">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-3">
             How to Merge PDF Files
           </h2>
-          <p className="text-gray-700 leading-relaxed mb-2">
-            Merging PDFs with DOSIBridge takes under 30 seconds:
+          <p className="text-sm sm:text-base text-gray-500 text-center mb-10 sm:mb-12 max-w-lg mx-auto">
+            Five steps, under 30 seconds. No software to install.
           </p>
-          <ol className="list-decimal list-inside text-gray-700 leading-relaxed mb-6 space-y-2">
-            <li><strong>Upload your PDF files</strong> — Drag and drop files onto the upload area or click to browse. You can upload up to 20 PDFs at once, each up to 50 MB.</li>
-            <li><strong>Select pages</strong> — Click any uploaded file to view its pages. Choose all pages or pick only the ones you need.</li>
-            <li><strong>Reorder pages</strong> — Drag and drop pages into your preferred sequence across all uploaded files.</li>
-            <li><strong>Set options</strong> — Name your output file, add page numbers, watermark text, or password protection.</li>
-            <li><strong>Merge and download</strong> — Click merge and download your combined PDF in seconds.</li>
-          </ol>
 
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mt-8 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6">
+            {steps.map((step, i) => (
+              <div key={i} className="text-center group">
+                <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-primary-50 group-hover:bg-primary-100 flex items-center justify-center transition-colors mb-3">
+                  <step.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
+                </div>
+                <span className="block text-xs font-bold text-primary-600 mb-1">Step {i + 1}</span>
+                <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">{step.title}</h3>
+                <p className="text-xs sm:text-sm text-gray-500 leading-snug">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why DOSIBridge ── */}
+      <section className="bg-gray-50 py-12 sm:py-16 md:py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-3">
             Why Use DOSIBridge PDF Joiner?
           </h2>
-
-          <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">No Signup Required</h3>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Most PDF tools force you to create an account before you can do anything. DOSIBridge skips all of that.
-            Open the page, upload your files, and merge. No email address, no password, no verification step. Your
-            time matters more than our email list.
+          <p className="text-sm sm:text-base text-gray-500 text-center mb-10 sm:mb-12 max-w-lg mx-auto">
+            Built for speed, privacy, and simplicity. No tricks, no upsells.
           </p>
 
-          <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">No Watermark, Ever</h3>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Free PDF tools that stamp their logo on every page of your document are not actually free — they are
-            advertising on your work. DOSIBridge never adds watermarks, branding, or any modification to your
-            merged PDF. What you create is what you get.
-          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {features.map((feat, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 p-5 sm:p-6 hover:shadow-md transition-shadow">
+                <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center mb-4">
+                  <feat.icon className="w-5 h-5 text-primary-600" />
+                </div>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1.5">{feat.title}</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">{feat.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Privacy by Design</h3>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Your files are uploaded over encrypted HTTPS, processed on our secure servers, and automatically deleted
-            when your session ends. We never store your documents, never share them with third parties, and never
-            use them for any purpose other than performing the merge you requested.
-          </p>
-
-          <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Works on Every Device</h3>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            DOSIBridge PDF Joiner runs in your browser. Use it on your Windows PC, Mac, Linux workstation,
-            Chromebook, iPad, or Android phone. There is no software to install, no Java plugin to enable, and no
-            compatibility issues. If your device has a browser and internet, you can merge PDFs.
-          </p>
-
-          <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Drag-and-Drop Page Reordering</h3>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Most merging tools stack files end-to-end with no control over page order. DOSIBridge lets you select
-            specific pages from each PDF, then drag them into exactly the order you want. Need page 5 from one
-            document before page 1 of another? Just drag and drop. This is what makes DOSIBridge different from
-            simple file concatenation tools.
-          </p>
-
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mt-8 mb-4">
+      {/* ── Use Cases ── */}
+      <section className="bg-white py-12 sm:py-16 md:py-20 border-t border-gray-100">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-3">
             Common Uses for PDF Merging
           </h2>
-          <ul className="list-disc list-inside text-gray-700 leading-relaxed mb-4 space-y-2">
-            <li><strong>Job applications</strong> — Combine your CV, cover letter, and certificates into one PDF for clean submission.</li>
-            <li><strong>Business reports</strong> — Merge cover pages, summaries, charts, and appendices into a single polished document.</li>
-            <li><strong>Academic papers</strong> — Combine research papers, references, and supplementary materials for submission.</li>
-            <li><strong>Legal filings</strong> — Assemble contracts, exhibits, and supporting documentation into one filing package.</li>
-            <li><strong>Invoice bundles</strong> — Combine monthly invoices or receipts into one PDF for accounting or reimbursement.</li>
-          </ul>
+          <p className="text-sm sm:text-base text-gray-500 text-center mb-10 sm:mb-12 max-w-lg mx-auto">
+            Thousands of people use DOSIBridge every day for these scenarios.
+          </p>
 
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mt-8 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+            {useCases.map((uc, i) => (
+              <Link
+                key={i}
+                to={uc.link}
+                className="block rounded-xl border border-gray-200 p-4 sm:p-5 hover:border-primary-300 hover:shadow-sm transition-all group"
+              >
+                <h3 className="text-sm sm:text-base font-semibold text-gray-900 group-hover:text-primary-700 transition-colors mb-1">
+                  {uc.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-500">{uc.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Advanced Features ── */}
+      <section className="bg-gray-50 py-12 sm:py-16 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-10 sm:mb-12">
             Advanced Features
           </h2>
-          <ul className="list-disc list-inside text-gray-700 leading-relaxed mb-4 space-y-2">
-            <li><strong>Page numbering</strong> — Automatically add page numbers to your merged document.</li>
-            <li><strong>Watermarking</strong> — Add custom text watermarks for drafts, confidential documents, or branding.</li>
-            <li><strong>Password protection</strong> — Secure your merged PDF with a password.</li>
-            <li><strong>Custom file naming</strong> — Set a meaningful filename instead of "merged.pdf."</li>
-          </ul>
 
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mt-8 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            {[
+              { title: 'Page Numbering', desc: 'Automatically add page numbers to your merged document for easy navigation.' },
+              { title: 'Custom Watermarks', desc: 'Add your own text watermark — useful for drafts, confidential, or branding.' },
+              { title: 'Password Protection', desc: 'Secure your merged PDF with a password so only authorized recipients can open it.' },
+              { title: 'Custom File Naming', desc: 'Set a meaningful filename like "Report_Q4_2026.pdf" instead of generic "merged.pdf."' },
+            ].map((feat, i) => (
+              <div key={i} className="flex gap-3 sm:gap-4 bg-white rounded-xl border border-gray-200 p-4 sm:p-5">
+                <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-primary-600 font-bold text-sm">{i + 1}</span>
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">{feat.title}</h3>
+                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{feat.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Related Tools ── */}
+      <section className="bg-white py-12 sm:py-16 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-3">
             Related PDF Tools
           </h2>
-          <p className="text-gray-700 leading-relaxed mb-4">
+          <p className="text-sm sm:text-base text-gray-500 text-center mb-8 sm:mb-10 max-w-lg mx-auto">
             DOSIBridge PDF Joiner is part of the{' '}
             <a href="https://dosibridge.com/projects" className="text-primary-600 hover:text-primary-700 underline">
               DOSIBridge project suite
-            </a>. Explore our other free tools:
+            </a>.
           </p>
-          <ul className="list-disc list-inside text-gray-700 leading-relaxed mb-4 space-y-2">
-            <li><Link to="/merge-pdf" className="text-primary-600 hover:text-primary-700 underline">Merge PDF</Link> — Quick PDF merge tool</li>
-            <li><Link to="/combine-pdf-files" className="text-primary-600 hover:text-primary-700 underline">Combine PDF Files</Link> — Combine multiple documents into one</li>
-            <li><Link to="/merge-pdf-on-mobile" className="text-primary-600 hover:text-primary-700 underline">Merge PDF on Mobile</Link> — Mobile-optimized PDF merging</li>
-            <li><Link to="/merge-pdf-for-job-application" className="text-primary-600 hover:text-primary-700 underline">Merge PDF for Job Application</Link> — Combine CV, cover letter, and certificates</li>
-            <li><a href="https://converter.dosibridge.com" className="text-primary-600 hover:text-primary-700 underline">DOSIBridge Converter</a> — File conversion tools</li>
-          </ul>
-        </article>
 
-        <FAQSection items={faqItems} />
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+            {[
+              { label: 'Merge PDF', to: '/merge-pdf', desc: 'Quick PDF merge tool' },
+              { label: 'Combine PDF Files', to: '/combine-pdf-files', desc: 'Join documents together' },
+              { label: 'Merge on Mobile', to: '/merge-pdf-on-mobile', desc: 'Optimized for phones' },
+              { label: 'Job Application PDF', to: '/merge-pdf-for-job-application', desc: 'CV + cover letter' },
+              { label: 'DOSIBridge Converter', to: 'https://converter.dosibridge.com', desc: 'File conversion tools', external: true },
+              { label: 'SD Tools', to: 'https://sd.dosibridge.com', desc: 'More DOSIBridge tools', external: true },
+            ].map((tool, i) => (
+              tool.external ? (
+                <a key={i} href={tool.to} className="block rounded-xl border border-gray-200 p-4 hover:border-primary-300 hover:shadow-sm transition-all">
+                  <p className="text-sm font-semibold text-gray-900 mb-0.5">{tool.label}</p>
+                  <p className="text-xs text-gray-500">{tool.desc}</p>
+                </a>
+              ) : (
+                <Link key={i} to={tool.to} className="block rounded-xl border border-gray-200 p-4 hover:border-primary-300 hover:shadow-sm transition-all">
+                  <p className="text-sm font-semibold text-gray-900 mb-0.5">{tool.label}</p>
+                  <p className="text-xs text-gray-500">{tool.desc}</p>
+                </Link>
+              )
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section className="bg-gray-50 py-12 sm:py-16 md:py-20 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FAQSection items={faqItems} />
+        </div>
       </section>
     </>
   );
