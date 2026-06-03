@@ -14,7 +14,7 @@ const MergeOptions = ({ options, onOptionsChange }) => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
           <div className="flex items-center space-x-1.5 sm:space-x-2">
-            <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <FileText aria-hidden="true" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Output Filename</span>
           </div>
         </label>
@@ -30,13 +30,16 @@ const MergeOptions = ({ options, onOptionsChange }) => {
       {/* Add page numbers */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1.5 sm:space-x-2">
-          <Hash className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-600" />
+          <Hash aria-hidden="true" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-600" />
           <label className="text-sm font-medium text-gray-700">
             Add Page Numbers
           </label>
         </div>
         <button
           onClick={() => handleChange('add_page_numbers', !options.add_page_numbers)}
+          role="switch"
+          aria-checked={options.add_page_numbers}
+          aria-label="Add page numbers"
           className={`
             relative inline-flex h-6 w-11 items-center rounded-full transition-colors
             ${options.add_page_numbers ? 'bg-primary-600' : 'bg-gray-200'}
@@ -55,7 +58,7 @@ const MergeOptions = ({ options, onOptionsChange }) => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
           <div className="flex items-center space-x-1.5 sm:space-x-2">
-            <Type className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <Type aria-hidden="true" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Watermark Text (Optional)</span>
           </div>
         </label>
@@ -72,7 +75,7 @@ const MergeOptions = ({ options, onOptionsChange }) => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
           <div className="flex items-center space-x-1.5 sm:space-x-2">
-            <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <Lock aria-hidden="true" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Password Protection (Optional)</span>
           </div>
         </label>

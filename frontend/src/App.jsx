@@ -1,333 +1,130 @@
-import { FileText, Shuffle, Trash2, Upload as UploadIcon } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import DownloadManager from './components/DownloadManager';
-import FileList from './components/FileList';
-import FileUploader from './components/FileUploader';
-import MergeOptions from './components/MergeOptions';
-import PageReorderer from './components/PageReorderer';
-import PageSelector from './components/PageSelector';
+import Layout from './components/Layout';
 
-import { pdfAPI } from './services/api';
-import { APP_NAME } from './utils/constants';
-import { clearSession, getSessionId } from './utils/helpers';
+// Main tool pages
+import HomePage from './pages/HomePage';
+import MergePdfPage from './pages/MergePdfPage';
+import PdfJoinerPage from './pages/PdfJoinerPage';
+import CombinePdfFilesPage from './pages/CombinePdfFilesPage';
+
+// Free/no-friction intent pages
+import MergePdfOnlineFreePage from './pages/MergePdfOnlineFreePage';
+import MergePdfNoWatermarkPage from './pages/MergePdfNoWatermarkPage';
+
+// Device/use-case intent pages
+import MergePdfOnMobilePage from './pages/MergePdfOnMobilePage';
+import MergePdfJobApplicationPage from './pages/MergePdfJobApplicationPage';
+import CombineCvCertificatesPage from './pages/CombineCvCertificatesPage';
+import MergeUniversityDocumentsPage from './pages/MergeUniversityDocumentsPage';
+import MergeScannedDocumentsPage from './pages/MergeScannedDocumentsPage';
+
+// Blog/guide pages
+import HowToMergePdfPage from './pages/blog/HowToMergePdfPage';
+import HowToCombineCvCertificatesPage from './pages/blog/HowToCombineCvCertificatesPage';
+import HowToMergePdfOnMobilePage from './pages/blog/HowToMergePdfOnMobilePage';
+import HowToReorderPdfPage from './pages/blog/HowToReorderPdfPage';
+
+// Related tool placeholders
+import ComingSoonToolPage from './pages/ComingSoonToolPage';
+
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
-  const [sessionId, setSessionId] = useState(null);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [selectedFileId, setSelectedFileId] = useState(null);
-  const [fileSelections, setFileSelections] = useState({});
-  const [orderedPages, setOrderedPages] = useState([]);
-  const [mergeOptions, setMergeOptions] = useState({
-    output_filename: 'merged.pdf',
-    add_page_numbers: false,
-    watermark_text: '',
-    password: '',
-  });
-  const [jobId, setJobId] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [isMerging, setIsMerging] = useState(false);
-
-  useEffect(() => {
-    const sid = getSessionId();
-    setSessionId(sid);
-  }, []);
-
-  useEffect(() => {
-    updateOrderedPages();
-  }, [fileSelections, uploadedFiles]);
-
-  const updateOrderedPages = () => {
-    const pages = [];
-    
-    Object.entries(fileSelections).forEach(([fileId, selectedPages]) => {
-      const file = uploadedFiles.find((f) => f.file_id === fileId);
-      if (file) {
-        selectedPages.forEach((pageNumber) => {
-          pages.push({
-            fileId,
-            pageNumber,
-            filename: file.original_filename || file.filename,
-          });
-        });
-      }
-    });
-    
-    setOrderedPages(pages);
-  };
-
-  const handleFilesSelected = async (files) => {
-    setIsUploading(true);
-    
-    try {
-      const response = await pdfAPI.uploadFiles(files, sessionId);
-      
-      if (response.uploaded_files && response.uploaded_files.length > 0) {
-        setUploadedFiles((prev) => [...prev, ...response.uploaded_files]);
-        toast.success(`${response.uploaded_files.length} file(s) uploaded successfully`);
-        
-        // Auto-select first file if none selected
-        if (!selectedFileId && response.uploaded_files.length > 0) {
-          setSelectedFileId(response.uploaded_files[0].file_id);
-        }
-      }
-      
-      if (response.errors && response.errors.length > 0) {
-        response.errors.forEach((error) => {
-          toast.error(error);
-        });
-      }
-    } catch (error) {
-      console.error('Upload error:', error);
-      toast.error('Failed to upload files');
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const handleDeleteFile = async (fileId) => {
-    try {
-      await pdfAPI.deleteFile(sessionId, fileId);
-      setUploadedFiles((prev) => prev.filter((f) => f.file_id !== fileId));
-      
-      // Remove selections for this file
-      const newSelections = { ...fileSelections };
-      delete newSelections[fileId];
-      setFileSelections(newSelections);
-      
-      // Update selected file if deleted
-      if (selectedFileId === fileId) {
-        const remainingFiles = uploadedFiles.filter((f) => f.file_id !== fileId);
-        setSelectedFileId(remainingFiles.length > 0 ? remainingFiles[0].file_id : null);
-      }
-      
-      toast.success('File deleted');
-    } catch (error) {
-      console.error('Delete error:', error);
-      toast.error('Failed to delete file');
-    }
-  };
-
-  const handlePageSelectionChange = (fileId, selectedPages) => {
-    setFileSelections((prev) => ({
-      ...prev,
-      [fileId]: selectedPages,
-    }));
-  };
-
-  const handlePageReorder = (newOrderedPages) => {
-    setOrderedPages(newOrderedPages);
-  };
-
-  const handleRemovePage = (index) => {
-    const newPages = [...orderedPages];
-    newPages.splice(index, 1);
-    setOrderedPages(newPages);
-  };
-
-  const handleMerge = async () => {
-    if (orderedPages.length === 0) {
-      toast.error('Please select at least one page to merge');
-      return;
-    }
-
-    setIsMerging(true);
-    
-    try {
-      // Build selections from ordered pages
-      const selectionsMap = {};
-      orderedPages.forEach((page) => {
-        if (!selectionsMap[page.fileId]) {
-          selectionsMap[page.fileId] = [];
-        }
-        selectionsMap[page.fileId].push(page.pageNumber);
-      });
-
-      const selections = Object.entries(selectionsMap).map(([fileId, pages]) => ({
-        file_id: fileId,
-        pages,
-      }));
-
-      const mergeRequest = {
-        session_id: sessionId,
-        selections,
-        ...mergeOptions,
-      };
-
-      const response = await pdfAPI.mergePDFs(mergeRequest);
-      setJobId(response.job_id);
-      toast.success('PDFs merged successfully!');
-    } catch (error) {
-      console.error('Merge error:', error);
-      toast.error('Failed to merge PDFs');
-    } finally {
-      setIsMerging(false);
-    }
-  };
-
-  const handleNewProject = () => {
-    setUploadedFiles([]);
-    setSelectedFileId(null);
-    setFileSelections({});
-    setOrderedPages([]);
-    setJobId(null);
-    clearSession();
-    const newSessionId = getSessionId();
-    setSessionId(newSessionId);
-    toast.success('Started new project');
-  };
-
-  const selectedFile = uploadedFiles.find((f) => f.file_id === selectedFileId);
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Toaster position="top-right" />
-      
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6">
-          <div className="flex items-center justify-between flex-wrap gap-3">
-            <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
-              <div className="p-1.5 sm:p-2 bg-primary-600 rounded-lg flex-shrink-0">
-                <FileText className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 truncate">{APP_NAME}</h1>
-                <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Merge, reorder, and manage PDF files</p>
-              </div>
-            </div>
-            
-            {uploadedFiles.length > 0 && (
-              <button
-                onClick={handleNewProject}
-                className="btn btn-secondary flex items-center space-x-1.5 sm:space-x-2 text-sm sm:text-base flex-shrink-0"
-              >
-                <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">New Project</span>
-                <span className="sm:hidden">New</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
+    <Layout>
+      <Routes>
+        {/* Homepage */}
+        <Route path="/" element={<HomePage />} />
 
-      {/* Main content */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-          {/* Left column - Upload & File List */}
-          <div className="lg:col-span-1 space-y-4 sm:space-y-5 md:space-y-6 order-2 lg:order-1">
-            <div className="card p-4 sm:p-5 md:p-6">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center space-x-2">
-                <UploadIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span>Upload PDFs</span>
-              </h2>
-              <FileUploader
-                onFilesSelected={handleFilesSelected}
-                existingFilesCount={uploadedFiles.length}
-              />
-            </div>
+        {/* Cluster: Merge PDF (main tool intent) */}
+        <Route path="/merge-pdf" element={<MergePdfPage />} />
+        <Route path="/pdf-joiner" element={<PdfJoinerPage />} />
+        <Route path="/combine-pdf-files" element={<CombinePdfFilesPage />} />
 
-            <div className="card p-4 sm:p-5 md:p-6">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
-                Uploaded Files ({uploadedFiles.length})
-              </h2>
-              <FileList
-                files={uploadedFiles}
-                onDeleteFile={handleDeleteFile}
-                onSelectFile={setSelectedFileId}
-                selectedFileId={selectedFileId}
-              />
-            </div>
-          </div>
+        {/* Cluster: Free/no-friction intent */}
+        <Route path="/merge-pdf-online-free" element={<MergePdfOnlineFreePage />} />
+        <Route path="/merge-pdf-no-watermark" element={<MergePdfNoWatermarkPage />} />
 
-          {/* Middle column - Page Selection */}
-          <div className="lg:col-span-2 space-y-4 sm:space-y-5 md:space-y-6 order-1 lg:order-2">
-            {selectedFile && (
-              <div className="card p-4 sm:p-5 md:p-6">
-                <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
-                  <span className="block sm:inline">Select Pages</span>
-                  <span className="block text-sm sm:text-base text-gray-600 sm:ml-2 mt-1 sm:mt-0 sm:inline truncate">
-                    {selectedFile.original_filename || selectedFile.filename}
-                  </span>
-                </h2>
-                <PageSelector
-                  file={selectedFile}
-                  sessionId={sessionId}
-                  selectedPages={fileSelections[selectedFileId] || []}
-                  onSelectionChange={handlePageSelectionChange}
-                />
-              </div>
-            )}
+        {/* Cluster: Device/use-case intent */}
+        <Route path="/merge-pdf-on-mobile" element={<MergePdfOnMobilePage />} />
+        <Route path="/merge-pdf-for-job-application" element={<MergePdfJobApplicationPage />} />
+        <Route path="/combine-cv-and-certificates-pdf" element={<CombineCvCertificatesPage />} />
+        <Route path="/merge-university-documents-pdf" element={<MergeUniversityDocumentsPage />} />
+        <Route path="/merge-scanned-documents-pdf" element={<MergeScannedDocumentsPage />} />
 
-            {/* Page Reorderer */}
-            <div className="card p-4 sm:p-5 md:p-6">
-              <PageReorderer
-                pages={orderedPages}
-                onReorder={handlePageReorder}
-                onRemove={handleRemovePage}
-                sessionId={sessionId}
-              />
-            </div>
+        {/* Cluster: Blog/guides (problem/guide intent) */}
+        <Route path="/blog/how-to-merge-pdf-files-online" element={<HowToMergePdfPage />} />
+        <Route path="/blog/how-to-combine-cv-certificates-into-one-pdf" element={<HowToCombineCvCertificatesPage />} />
+        <Route path="/blog/how-to-merge-pdf-on-mobile" element={<HowToMergePdfOnMobilePage />} />
+        <Route path="/blog/how-to-reorder-pdf-before-merging" element={<HowToReorderPdfPage />} />
 
-            {/* Merge Options */}
-            {orderedPages.length > 0 && (
-              <>
-                <MergeOptions
-                  options={mergeOptions}
-                  onOptionsChange={setMergeOptions}
-                />
+        {/* Cluster: Related tools (coming soon — SEO placeholders) */}
+        <Route path="/compress-pdf" element={
+          <ComingSoonToolPage
+            title="Compress PDF Online"
+            seoTitle="Compress PDF — Reduce PDF File Size Online Free | DOSIBridge"
+            description="Reduce PDF file size without losing quality. Compress large PDFs for email, upload, or storage. Free online PDF compressor — coming soon."
+            path="/compress-pdf"
+            keywords="compress PDF, reduce PDF size, PDF compressor, shrink PDF, make PDF smaller, compress PDF online free"
+            relatedText="While we build the compressor, you can merge your PDFs to combine multiple smaller files into one organized document."
+          />
+        } />
+        <Route path="/split-pdf" element={
+          <ComingSoonToolPage
+            title="Split PDF Online"
+            seoTitle="Split PDF — Extract Pages from PDF Online Free | DOSIBridge"
+            description="Split a PDF into separate files or extract specific pages. Free online PDF splitter — coming soon to DOSIBridge."
+            path="/split-pdf"
+            keywords="split PDF, extract PDF pages, PDF splitter, split PDF online, separate PDF pages, break apart PDF"
+            relatedText="Need to select specific pages from a PDF? You can already do this with our merge tool — upload a PDF, select only the pages you want, and merge them into a new file."
+          />
+        } />
+        <Route path="/image-to-pdf" element={
+          <ComingSoonToolPage
+            title="Image to PDF Converter"
+            seoTitle="Image to PDF — Convert Images to PDF Online Free | DOSIBridge"
+            description="Convert JPG, PNG, and other images to PDF format. Free online image to PDF converter — coming soon to DOSIBridge."
+            path="/image-to-pdf"
+            keywords="image to PDF, convert image to PDF, JPG to PDF, PNG to PDF, photo to PDF, image to PDF converter"
+          />
+        } />
+        <Route path="/jpg-to-pdf" element={
+          <ComingSoonToolPage
+            title="JPG to PDF Converter"
+            seoTitle="JPG to PDF — Convert JPEG Images to PDF Free | DOSIBridge"
+            description="Convert JPG and JPEG images to PDF documents. Combine multiple photos into one PDF. Free online — coming soon to DOSIBridge."
+            path="/jpg-to-pdf"
+            keywords="JPG to PDF, JPEG to PDF, convert JPG to PDF, photo to PDF, multiple JPG to PDF, JPG to PDF converter"
+          />
+        } />
+        <Route path="/reorder-pdf" element={
+          <ComingSoonToolPage
+            title="Reorder PDF Pages"
+            seoTitle="Reorder PDF Pages — Rearrange PDF Online Free | DOSIBridge"
+            description="Rearrange pages in a PDF document by dragging and dropping. Free online PDF page reorderer — coming soon as a standalone tool."
+            path="/reorder-pdf"
+            keywords="reorder PDF pages, rearrange PDF, PDF page reorder, move PDF pages, reorganize PDF, sort PDF pages"
+            relatedText="You can already reorder PDF pages with our merge tool. Upload your PDF, select pages, drag them into order, and merge into a new file."
+          />
+        } />
+        <Route path="/delete-pdf-pages" element={
+          <ComingSoonToolPage
+            title="Delete Pages from PDF"
+            seoTitle="Delete PDF Pages — Remove Pages from PDF Online Free | DOSIBridge"
+            description="Remove unwanted pages from a PDF document. Free online PDF page remover — coming soon to DOSIBridge."
+            path="/delete-pdf-pages"
+            keywords="delete PDF pages, remove pages from PDF, PDF page remover, remove PDF pages online, delete page from PDF free"
+            relatedText="You can already remove pages with our merge tool. Upload your PDF, select only the pages you want to keep, and merge them into a new file without the unwanted pages."
+          />
+        } />
 
-                {/* Merge Button */}
-                <button
-                  onClick={handleMerge}
-                  disabled={isMerging || orderedPages.length === 0}
-                  className="w-full btn btn-primary flex items-center justify-center space-x-2 py-3 sm:py-4 text-base sm:text-lg"
-                >
-                  {isMerging ? (
-                    <>
-                      <div className="spinner w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full" />
-                      <span>Merging...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Shuffle className="w-4 h-4 sm:w-5 sm:h-5" />
-                      <span className="whitespace-nowrap">
-                        <span className="hidden sm:inline">Merge PDFs </span>
-                        <span className="sm:hidden">Merge </span>
-                        ({orderedPages.length} pages)
-                      </span>
-                    </>
-                  )}
-                </button>
-              </>
-            )}
-
-            {/* Download Manager */}
-            {jobId && (
-              <DownloadManager
-                jobId={jobId}
-                onComplete={() => {
-                  // Optionally handle completion
-                }}
-              />
-            )}
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-8 sm:mt-10 md:mt-12">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-5 md:py-6">
-          <p className="text-center text-xs sm:text-sm text-gray-600">
-            <span className="hidden sm:inline">{APP_NAME} - Professional PDF Management Tool</span>
-            <span className="sm:hidden">{APP_NAME}</span>
-          </p>
-        </div>
-      </footer>
-    </div>
+        {/* 404 */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Layout>
   );
 }
 
 export default App;
-

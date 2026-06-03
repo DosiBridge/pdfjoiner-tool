@@ -6,7 +6,7 @@ const FileList = ({ files, onDeleteFile, onSelectFile, selectedFileId }) => {
   if (files.length === 0) {
     return (
       <div className="text-center py-12 text-gray-500">
-        <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+        <FileText aria-hidden="true" className="w-16 h-16 mx-auto mb-4 text-gray-300" />
         <p className="text-lg font-medium">No files uploaded yet</p>
         <p className="text-sm">Upload PDF files to get started</p>
       </div>
@@ -34,7 +34,7 @@ const FileList = ({ files, onDeleteFile, onSelectFile, selectedFileId }) => {
               p-2 sm:p-2.5 md:p-3 rounded-lg flex-shrink-0
               ${selectedFileId === file.file_id ? 'bg-primary-100' : 'bg-gray-100'}
             `}>
-              <File className={`
+              <File aria-hidden="true" className={`
                 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6
                 ${selectedFileId === file.file_id ? 'text-primary-600' : 'text-gray-600'}
               `} />
@@ -60,8 +60,9 @@ const FileList = ({ files, onDeleteFile, onSelectFile, selectedFileId }) => {
               }}
               className="p-1.5 sm:p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
               title="Delete file"
+              aria-label={`Delete ${file.original_filename || file.filename}`}
             >
-              <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Trash2 aria-hidden="true" className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
