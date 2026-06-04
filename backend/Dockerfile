@@ -34,6 +34,9 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 ENV FLASK_APP=app/main.py
 ENV PORT=5000
+ENV UPLOAD_FOLDER=/app/temp/uploads
+ENV THUMBNAIL_FOLDER=/app/temp/thumbnails
+ENV MERGED_FOLDER=/app/temp/merged
 ENV CORS_ORIGINS=${CORS_ORIGINS}
 
 # Expose port
