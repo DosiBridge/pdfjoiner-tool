@@ -12,14 +12,22 @@ logger = logging.getLogger(__name__)
 class FileManager:
     """Manage uploaded files and sessions."""
     
-    def __init__(self, base_folder: Path):
+    def __init__(self, base_folder: Path, cleanup_folders: Optional[list[Path]] = None):
         """
         Initialize file manager.
         
         Args:
-            base_folder: Base folder for file storage
+            base_folder: Base folder for uploaded source PDF storage
+            cleanup_folders: All session-scoped storage roots to clean up
         """
         self.base_folder = base_folder
+        # A session stores data in multiple roots:
+        # - uploads/<session_id> for source PDFs
+        # - thumbnails/<session_id> for cached previews
+        # - merged/<session_id> for generated/downloadable PDFs
+        # Keep all of them tied to the same retention policy so user files do
+        # not survive after the upload session expires.
+        self.cleanup_folders = cleanup_folders or [base_folder]
         self.sessions: Dict[str, dict] = {}
     
     def create_session(self, session_id: str) -> Path:
@@ -236,15 +244,19 @@ class FileManager:
             bool: True if successful
         """
         try:
-            session_folder = self.get_session_folder(session_id)
-            if session_folder and session_folder.exists():
-                shutil.rmtree(session_folder)
-                logger.info(f"Cleaned up session folder: {session_folder}")
+            removed_any = False
+            for folder in self.cleanup_folders:
+                session_folder = folder / session_id
+                if session_folder.exists():
+                    shutil.rmtree(session_folder)
+                    removed_any = True
+                    logger.info(f"Cleaned up session folder: {session_folder}")
             
             if session_id in self.sessions:
                 del self.sessions[session_id]
+                removed_any = True
             
-            return True
+            return removed_any
             
         except Exception as e:
             logger.error(f"Error cleaning up session {session_id}: {e}")
@@ -275,10 +287,18 @@ class FileManager:
             if session_id in self.sessions:
                 del self.sessions[session_id]
         
-        # Clean up orphaned folders
+        # Clean up orphaned folders in every storage root. This removes source
+        # uploads, thumbnail caches, and generated PDFs even when the process
+        # restarted and in-memory session metadata was lost.
         try:
-            for item in self.base_folder.iterdir():
-                if item.is_dir():
+            seen_paths = set()
+            for folder in self.cleanup_folders:
+                if not folder.exists():
+                    continue
+                for item in folder.iterdir():
+                    if item in seen_paths or not item.is_dir():
+                        continue
+                    seen_paths.add(item)
                     folder_age = datetime.now() - datetime.fromtimestamp(
                         item.stat().st_mtime
                     )

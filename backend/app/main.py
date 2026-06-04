@@ -86,7 +86,14 @@ limiter = Limiter(
 # Directories already ensured above
 
 # Initialize file manager
-file_manager = FileManager(Config.UPLOAD_FOLDER)
+file_manager = FileManager(
+    Config.UPLOAD_FOLDER,
+    cleanup_folders=[
+        Config.UPLOAD_FOLDER,
+        Config.THUMBNAIL_FOLDER,
+        Config.MERGED_FOLDER,
+    ],
+)
 app.config['file_manager'] = file_manager
 
 # Initialize job manager (in-memory for now)
