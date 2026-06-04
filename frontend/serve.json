@@ -1,0 +1,40 @@
+{
+  "rewrites": [
+    { "source": "/api/**", "destination": "/api/**" },
+    { "source": "/merge-pdf", "destination": "/merge-pdf/index.html" },
+    { "source": "/pdf-joiner", "destination": "/pdf-joiner/index.html" },
+    { "source": "/combine-pdf-files", "destination": "/combine-pdf-files/index.html" },
+    { "source": "/merge-pdf-online-free", "destination": "/merge-pdf-online-free/index.html" },
+    { "source": "/merge-pdf-no-watermark", "destination": "/merge-pdf-no-watermark/index.html" },
+    { "source": "/merge-pdf-on-mobile", "destination": "/merge-pdf-on-mobile/index.html" },
+    { "source": "/merge-pdf-for-job-application", "destination": "/merge-pdf-for-job-application/index.html" },
+    { "source": "/combine-cv-and-certificates-pdf", "destination": "/combine-cv-and-certificates-pdf/index.html" },
+    { "source": "/merge-university-documents-pdf", "destination": "/merge-university-documents-pdf/index.html" },
+    { "source": "/merge-scanned-documents-pdf", "destination": "/merge-scanned-documents-pdf/index.html" },
+    { "source": "/compress-pdf", "destination": "/compress-pdf/index.html" },
+    { "source": "/split-pdf", "destination": "/split-pdf/index.html" },
+    { "source": "/image-to-pdf", "destination": "/image-to-pdf/index.html" },
+    { "source": "/jpg-to-pdf", "destination": "/jpg-to-pdf/index.html" },
+    { "source": "/reorder-pdf", "destination": "/reorder-pdf/index.html" },
+    { "source": "/delete-pdf-pages", "destination": "/delete-pdf-pages/index.html" },
+    { "source": "/blog/how-to-merge-pdf-files-online", "destination": "/blog/how-to-merge-pdf-files-online/index.html" },
+    { "source": "/blog/how-to-combine-cv-certificates-into-one-pdf", "destination": "/blog/how-to-combine-cv-certificates-into-one-pdf/index.html" },
+    { "source": "/blog/how-to-merge-pdf-on-mobile", "destination": "/blog/how-to-merge-pdf-on-mobile/index.html" },
+    { "source": "/blog/how-to-reorder-pdf-before-merging", "destination": "/blog/how-to-reorder-pdf-before-merging/index.html" },
+    { "source": "/**", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "**/*.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache" }
+      ]
+    },
+    {
+      "source": "assets/**",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}

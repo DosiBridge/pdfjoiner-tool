@@ -210,14 +210,26 @@ function generatePage(templateHtml, page) {
     `<meta name="twitter:description" content="${page.description}"`
   );
 
-  // Add H1 in noscript for crawlers
+  // Replace noscript with page-specific H1, description, and internal links
   html = html.replace(
     /<noscript>[\s\S]*?<\/noscript>/,
     `<noscript>
-      <div style="padding: 2rem; text-align: center; font-family: system-ui, sans-serif;">
+      <div style="padding: 2rem; font-family: system-ui, sans-serif; max-width: 800px; margin: 0 auto;">
         <h1>${page.h1}</h1>
         <p>${page.description}</p>
-        <p><a href="${BASE_URL}">Go to DOSIBridge PDF Joiner</a></p>
+        <p><a href="${BASE_URL}/">Back to DOSIBridge PDF Joiner</a></p>
+        <h2>Related PDF Tools</h2>
+        <ul>
+          <li><a href="${BASE_URL}/merge-pdf">Merge PDF</a></li>
+          <li><a href="${BASE_URL}/pdf-joiner">PDF Joiner</a></li>
+          <li><a href="${BASE_URL}/combine-pdf-files">Combine PDF Files</a></li>
+          <li><a href="${BASE_URL}/merge-pdf-no-watermark">Merge PDF No Watermark</a></li>
+          <li><a href="${BASE_URL}/merge-pdf-on-mobile">Merge PDF on Mobile</a></li>
+          <li><a href="${BASE_URL}/merge-pdf-for-job-application">Merge PDF for Job Application</a></li>
+          <li><a href="${BASE_URL}/combine-cv-and-certificates-pdf">Combine CV and Certificates</a></li>
+          <li><a href="${BASE_URL}/compress-pdf">Compress PDF</a></li>
+          <li><a href="${BASE_URL}/split-pdf">Split PDF</a></li>
+        </ul>
       </div>
     </noscript>`
   );

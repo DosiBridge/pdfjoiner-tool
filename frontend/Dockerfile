@@ -37,8 +37,9 @@ WORKDIR /app
 # Install serve globally for static file serving
 RUN npm install -g serve
 
-# Copy built files from builder stage
+# Copy built files and serve config from builder stage
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/serve.json ./dist/serve.json
 
 # Expose port
 EXPOSE 3000
@@ -47,6 +48,6 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD wget --quiet --tries=1 --spider http://localhost:3000/ || exit 1
 
-# Start serve
-CMD ["serve", "-s", "dist", "-l", "3000"]
+# Start serve (no -s flag: uses serve.json rewrites for per-route HTML, then SPA fallback)
+CMD ["serve", "dist", "-l", "3000", "--config", "dist/serve.json"]
 
