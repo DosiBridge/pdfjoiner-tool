@@ -34,7 +34,6 @@ function MergePdfOnlineFreePage() {
         title="Merge PDF Online Free — No Limits, No Signup | DOSIBridge"
         description="Merge PDF files online for free with no daily limits, no account required, and no watermarks. Upload, reorder, and download your merged PDF instantly."
         path="/merge-pdf-online-free"
-        keywords="merge PDF online free, free PDF merger, merge PDF free no limit, merge PDF without signup, free online PDF merge tool"
         faqItems={faqItems}
       />
 

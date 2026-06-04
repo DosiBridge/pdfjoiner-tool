@@ -34,7 +34,6 @@ function CombineCvCertificatesPage() {
         title="Combine CV and Certificates into One PDF — Free | DOSIBridge"
         description="Merge your CV, certificates, diplomas, and credentials into a single professional PDF. Free, no watermark, perfect for job applications and academic submissions."
         path="/combine-cv-and-certificates-pdf"
-        keywords="combine CV and certificates PDF, merge CV certificates, combine resume and certificates, merge diploma and CV, combine credentials PDF, CV certificate merger"
         faqItems={faqItems}
       />
 

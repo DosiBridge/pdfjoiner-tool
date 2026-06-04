@@ -19,7 +19,6 @@ function ReorderPdfPage() {
         title="Reorder PDF Pages — Rearrange PDF Online Free | DOSIBridge"
         description="Rearrange pages in a PDF document. Enter your desired page order and download the reordered PDF. Free, no signup."
         path="/reorder-pdf"
-        keywords="reorder PDF pages, rearrange PDF, PDF page reorder, move PDF pages, reorganize PDF"
         faqItems={faqItems}
       />
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-12 md:py-16">

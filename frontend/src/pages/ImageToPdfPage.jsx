@@ -19,7 +19,6 @@ function ImageToPdfPage() {
         title="Image to PDF — Convert Images to PDF Online Free | DOSIBridge"
         description="Convert JPG, PNG, and other images to PDF format. Combine multiple photos into one PDF. Free online."
         path="/image-to-pdf"
-        keywords="image to PDF, convert image to PDF, JPG to PDF, PNG to PDF, photo to PDF"
         faqItems={faqItems}
       />
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-12 md:py-16">

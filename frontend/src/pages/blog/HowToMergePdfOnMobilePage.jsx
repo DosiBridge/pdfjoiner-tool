@@ -29,7 +29,6 @@ function HowToMergePdfOnMobilePage() {
         title="How to Merge PDF on Mobile — iPhone & Android Guide | DOSIBridge"
         description="Step-by-step guide to merging PDF files on your iPhone or Android phone. No app needed — use your browser to combine PDFs in under a minute."
         path="/blog/how-to-merge-pdf-on-mobile"
-        keywords="how to merge PDF on mobile, merge PDF iPhone, merge PDF Android, combine PDF on phone, how to merge PDF on phone, mobile PDF merge tutorial"
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">

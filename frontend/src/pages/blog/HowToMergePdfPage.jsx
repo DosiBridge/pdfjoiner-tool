@@ -34,7 +34,6 @@ function HowToMergePdfPage() {
         title="How to Merge PDF Files Online — Step-by-Step Guide | DOSIBridge"
         description="Learn how to merge PDF files into one document. Step-by-step guide covering free online tools, desktop methods, and mobile options. Merge PDFs in under 30 seconds."
         path="/blog/how-to-merge-pdf-files-online"
-        keywords="how to merge PDF files, how to combine PDFs, how to merge PDF, how to make one PDF from many files, how to combine multiple PDFs into one, merge PDF tutorial"
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">

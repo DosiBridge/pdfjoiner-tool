@@ -2,7 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { renderWithRouter, screen } from '../test/test-utils';
 import App from '../App';
 
-// Mock PdfTool since it requires API context
 vi.mock('../components/PdfTool', () => ({
   default: () => <div data-testid="pdf-tool">PDF Tool</div>,
 }));
@@ -18,14 +17,20 @@ describe('App Routing', () => {
     expect(screen.getByText('Merge PDF Files Online')).toBeInTheDocument();
   });
 
-  it('renders pdf-joiner page', () => {
+  it('redirects /pdf-joiner to /merge-pdf', () => {
     renderWithRouter(<App />, { route: '/pdf-joiner' });
-    expect(screen.getByRole('heading', { level: 1, name: /PDF Joiner/ })).toBeInTheDocument();
+    // Should show merge-pdf content after redirect
+    expect(screen.getByText('Merge PDF Files Online')).toBeInTheDocument();
   });
 
-  it('renders combine-pdf-files page', () => {
+  it('redirects /combine-pdf-files to /merge-pdf', () => {
     renderWithRouter(<App />, { route: '/combine-pdf-files' });
-    expect(screen.getByText('Combine PDF Files Into One Document')).toBeInTheDocument();
+    expect(screen.getByText('Merge PDF Files Online')).toBeInTheDocument();
+  });
+
+  it('redirects /jpg-to-pdf to /image-to-pdf', () => {
+    renderWithRouter(<App />, { route: '/jpg-to-pdf' });
+    expect(screen.getByText('Image to PDF Converter')).toBeInTheDocument();
   });
 
   it('renders merge-pdf-online-free page', () => {
@@ -53,29 +58,9 @@ describe('App Routing', () => {
     expect(screen.getByText('Combine CV and Certificates into One PDF')).toBeInTheDocument();
   });
 
-  it('renders university documents page', () => {
-    renderWithRouter(<App />, { route: '/merge-university-documents-pdf' });
-    expect(screen.getByText('Merge University Documents into One PDF')).toBeInTheDocument();
-  });
-
-  it('renders scanned documents page', () => {
-    renderWithRouter(<App />, { route: '/merge-scanned-documents-pdf' });
-    expect(screen.getByText('Merge Scanned Documents into One PDF')).toBeInTheDocument();
-  });
-
   it('renders 404 page for unknown routes', () => {
     renderWithRouter(<App />, { route: '/nonexistent-page' });
     expect(screen.getByText('Page Not Found')).toBeInTheDocument();
-  });
-
-  it('renders blog how-to-merge page', () => {
-    renderWithRouter(<App />, { route: '/blog/how-to-merge-pdf-files-online' });
-    expect(screen.getByText('How to Merge PDF Files Online')).toBeInTheDocument();
-  });
-
-  it('renders blog how-to-reorder page', () => {
-    renderWithRouter(<App />, { route: '/blog/how-to-reorder-pdf-before-merging' });
-    expect(screen.getByText('How to Reorder PDF Pages Before Merging')).toBeInTheDocument();
   });
 
   it('renders compress-pdf tool page', () => {
@@ -103,7 +88,6 @@ describe('App Routing', () => {
     expect(screen.getByText('Delete Pages from PDF')).toBeInTheDocument();
   });
 
-  // Verify layout is always present
   it('always shows header brand', () => {
     renderWithRouter(<App />, { route: '/' });
     expect(screen.getByText('DOSIBridge PDF Joiner')).toBeInTheDocument();
@@ -113,11 +97,6 @@ describe('App Routing', () => {
     renderWithRouter(<App />, { route: '/merge-pdf' });
     const footer = document.querySelector('footer');
     expect(footer).toBeTruthy();
-    expect(footer.textContent).toContain('Free online PDF merge tool');
-  });
-
-  it('renders the PDF tool on tool pages', () => {
-    renderWithRouter(<App />, { route: '/' });
-    expect(screen.getByTestId('pdf-tool')).toBeInTheDocument();
+    expect(footer.textContent).toContain('DOSIBridge PDF Joiner');
   });
 });

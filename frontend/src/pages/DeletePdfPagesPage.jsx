@@ -19,7 +19,6 @@ function DeletePdfPagesPage() {
         title="Delete PDF Pages — Remove Pages from PDF Online Free | DOSIBridge"
         description="Remove unwanted pages from a PDF document. Free online PDF page remover — no signup, no watermark."
         path="/delete-pdf-pages"
-        keywords="delete PDF pages, remove pages from PDF, PDF page remover, remove PDF pages online"
         faqItems={faqItems}
       />
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-12 md:py-16">

@@ -2,8 +2,6 @@
   "rewrites": [
     { "source": "/api/**", "destination": "/api/**" },
     { "source": "/merge-pdf", "destination": "/merge-pdf/index.html" },
-    { "source": "/pdf-joiner", "destination": "/pdf-joiner/index.html" },
-    { "source": "/combine-pdf-files", "destination": "/combine-pdf-files/index.html" },
     { "source": "/merge-pdf-online-free", "destination": "/merge-pdf-online-free/index.html" },
     { "source": "/merge-pdf-no-watermark", "destination": "/merge-pdf-no-watermark/index.html" },
     { "source": "/merge-pdf-on-mobile", "destination": "/merge-pdf-on-mobile/index.html" },
@@ -14,7 +12,6 @@
     { "source": "/compress-pdf", "destination": "/compress-pdf/index.html" },
     { "source": "/split-pdf", "destination": "/split-pdf/index.html" },
     { "source": "/image-to-pdf", "destination": "/image-to-pdf/index.html" },
-    { "source": "/jpg-to-pdf", "destination": "/jpg-to-pdf/index.html" },
     { "source": "/reorder-pdf", "destination": "/reorder-pdf/index.html" },
     { "source": "/delete-pdf-pages", "destination": "/delete-pdf-pages/index.html" },
     { "source": "/blog/how-to-merge-pdf-files-online", "destination": "/blog/how-to-merge-pdf-files-online/index.html" },

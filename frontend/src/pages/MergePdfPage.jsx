@@ -41,10 +41,9 @@ function MergePdfPage() {
   return (
     <>
       <SEOHead
-        title="Merge PDF — Free PDF Joiner & Merger Online | DOSIBridge"
-        description="Merge PDF files, join PDFs, or combine documents into one. Free online PDF merger with drag-and-drop reorder. No installation, no signup, no watermark."
+        title="Merge PDF Online — Free, No Signup | DOSIBridge"
+        description="Merge multiple PDF files into one document. Free online tool with drag-and-drop page reordering. No signup, no watermark."
         path="/merge-pdf"
-        keywords="merge PDF, PDF joiner, PDF merger, combine PDF, join PDF files, merge PDF files, merge PDF online, pdf joiner online, merge two PDFs, pdf merge tool"
         faqItems={faqItems}
       />
 

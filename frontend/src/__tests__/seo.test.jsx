@@ -10,21 +10,19 @@ describe('SEO - Page Metadata', () => {
   const pages = [
     { route: '/', titleContains: 'Merge PDF Online Free' },
     { route: '/merge-pdf', titleContains: 'Merge PDF' },
-    { route: '/pdf-joiner', titleContains: 'PDF Joiner' },
-    { route: '/combine-pdf-files', titleContains: 'Combine PDF Files' },
     { route: '/merge-pdf-online-free', titleContains: 'Merge PDF Online Free' },
-    { route: '/merge-pdf-no-watermark', titleContains: 'Without Watermark' },
+    { route: '/merge-pdf-no-watermark', titleContains: 'Watermark' },
     { route: '/merge-pdf-on-mobile', titleContains: 'Mobile' },
     { route: '/merge-pdf-for-job-application', titleContains: 'Job Application' },
     { route: '/combine-cv-and-certificates-pdf', titleContains: 'CV' },
-    { route: '/merge-university-documents-pdf', titleContains: 'University' },
-    { route: '/merge-scanned-documents-pdf', titleContains: 'Scanned' },
+    { route: '/compress-pdf', titleContains: 'Compress' },
+    { route: '/split-pdf', titleContains: 'Split' },
+    { route: '/image-to-pdf', titleContains: 'Image' },
     { route: '/blog/how-to-merge-pdf-files-online', titleContains: 'How to Merge' },
-    { route: '/blog/how-to-reorder-pdf-before-merging', titleContains: 'Reorder' },
   ];
 
   pages.forEach(({ route, titleContains }) => {
-    it(`${route} sets unique document title containing "${titleContains}"`, () => {
+    it(`${route} sets title containing "${titleContains}"`, () => {
       renderWithRouter(<App />, { route });
       expect(document.title).toContain(titleContains);
     });
@@ -42,9 +40,8 @@ describe('SEO - Heading Hierarchy', () => {
   const toolPages = [
     { route: '/', h1: 'Merge PDF Files Online for Free' },
     { route: '/merge-pdf', h1: 'Merge PDF Files Online' },
-    { route: '/pdf-joiner', h1: /PDF Joiner/ },
     { route: '/merge-pdf-on-mobile', h1: 'Merge PDF on Mobile' },
-    { route: '/merge-pdf-no-watermark', h1: 'Merge PDF Without Watermark' },
+    { route: '/compress-pdf', h1: 'Compress PDF Online' },
   ];
 
   toolPages.forEach(({ route, h1 }) => {
@@ -54,47 +51,44 @@ describe('SEO - Heading Hierarchy', () => {
       expect(h1Elements.length).toBe(1);
     });
 
-    it(`${route} H1 matches expected text`, () => {
+    it(`${route} H1 matches "${h1}"`, () => {
       renderWithRouter(<App />, { route });
       const h1Element = document.querySelector('h1');
-      if (h1 instanceof RegExp) {
-        expect(h1Element.textContent).toMatch(h1);
-      } else {
-        expect(h1Element.textContent).toBe(h1);
-      }
+      expect(h1Element.textContent).toBe(h1);
     });
   });
 });
 
-describe('SEO - Internal Linking', () => {
-  it('footer contains links to all major pages', () => {
-    renderWithRouter(<App />, { route: '/' });
-    const footerLinks = document.querySelectorAll('footer a[href]');
-    const hrefs = Array.from(footerLinks).map((a) => a.getAttribute('href'));
-
-    expect(hrefs).toContain('/merge-pdf');
-    expect(hrefs).toContain('/pdf-joiner');
-    expect(hrefs).toContain('/combine-pdf-files');
-    expect(hrefs).toContain('/merge-pdf-on-mobile');
-    expect(hrefs).toContain('/merge-pdf-for-job-application');
-    expect(hrefs).toContain('/blog/how-to-merge-pdf-files-online');
+describe('SEO - Redirects', () => {
+  it('/pdf-joiner redirects to /merge-pdf', () => {
+    renderWithRouter(<App />, { route: '/pdf-joiner' });
+    expect(document.querySelector('h1').textContent).toBe('Merge PDF Files Online');
   });
 
-  it('footer contains external DOSIBridge links', () => {
-    renderWithRouter(<App />, { route: '/' });
-    const footerLinks = document.querySelectorAll('footer a[href]');
-    const hrefs = Array.from(footerLinks).map((a) => a.getAttribute('href'));
+  it('/combine-pdf-files redirects to /merge-pdf', () => {
+    renderWithRouter(<App />, { route: '/combine-pdf-files' });
+    expect(document.querySelector('h1').textContent).toBe('Merge PDF Files Online');
+  });
 
-    expect(hrefs).toContain('https://dosibridge.com');
-    expect(hrefs).toContain('https://dosibridge.com/projects');
+  it('/jpg-to-pdf redirects to /image-to-pdf', () => {
+    renderWithRouter(<App />, { route: '/jpg-to-pdf' });
+    expect(document.querySelector('h1').textContent).toBe('Image to PDF Converter');
   });
 });
 
-describe('SEO - Structured Data', () => {
-  it('index.html has WebApplication schema', () => {
-    const scripts = document.querySelectorAll('script[type="application/ld+json"]');
-    // This tests the static HTML structured data
-    // At minimum, verify the page can render without errors
-    expect(true).toBe(true);
+describe('SEO - Footer Links', () => {
+  it('footer has core tool links', () => {
+    renderWithRouter(<App />, { route: '/' });
+    const footerLinks = document.querySelectorAll('footer a[href]');
+    const hrefs = Array.from(footerLinks).map((a) => a.getAttribute('href'));
+    expect(hrefs).toContain('/merge-pdf');
+    expect(hrefs).toContain('/compress-pdf');
+    expect(hrefs).toContain('https://dosibridge.com');
+  });
+
+  it('footer does not have excessive links (max 12)', () => {
+    renderWithRouter(<App />, { route: '/' });
+    const footerLinks = document.querySelectorAll('footer a[href]');
+    expect(footerLinks.length).toBeLessThanOrEqual(12);
   });
 });

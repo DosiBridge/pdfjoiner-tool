@@ -34,7 +34,6 @@ function CombinePdfFilesPage() {
         title="Combine PDF Files Into One — Free Online PDF Combiner | DOSIBridge"
         description="Combine multiple PDF files into a single document online. Select pages, reorder them, and download your combined PDF. Free, no signup, no watermark."
         path="/combine-pdf-files"
-        keywords="combine PDF files, combine PDFs into one, PDF combiner, merge multiple PDFs, join PDF files together, combine PDF documents online"
         faqItems={faqItems}
       />
 

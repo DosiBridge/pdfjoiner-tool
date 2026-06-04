@@ -34,7 +34,6 @@ function PdfJoinerPage() {
         title="PDF Joiner — Join PDF Files Online Free | DOSIBridge"
         description="Join multiple PDF files into one document online. Free PDF joiner with page selection and drag-and-drop reorder. No signup, no watermark, works on all devices."
         path="/pdf-joiner"
-        keywords="PDF joiner, join PDF files, joiner PDF, PDF joiner online, free PDF joiner, join PDF, pdf joiner free online, join two PDFs"
         faqItems={faqItems}
       />
 

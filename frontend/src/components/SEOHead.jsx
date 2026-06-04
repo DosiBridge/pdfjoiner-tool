@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const BASE_URL = 'https://pdfjoiner.dosibridge.com';
 
-function SEOHead({ title, description, path = '/', keywords, faqItems, noindex = false }) {
+function SEOHead({ title, description, path = '/', faqItems, noindex = false }) {
   useEffect(() => {
     document.title = title;
 
@@ -16,32 +16,25 @@ function SEOHead({ title, description, path = '/', keywords, faqItems, noindex =
     const canonicalUrl = `${BASE_URL}${path === '/' ? '/' : path}`;
 
     setMeta('name', 'description', description);
-    if (keywords) {
-      setMeta('name', 'keywords', keywords);
-    }
 
-    // Set robots meta for noindex pages
     setMeta('name', 'robots', noindex
       ? 'noindex, nofollow'
-      : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
+      : 'index, follow'
     );
 
-    // Update canonical
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
       canonical.setAttribute('href', canonicalUrl);
     }
 
-    // Open Graph
     setMeta('property', 'og:title', title);
     setMeta('property', 'og:description', description);
     setMeta('property', 'og:url', canonicalUrl);
 
-    // Twitter
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', description);
 
-    // Inject FAQPage structured data if FAQ items provided
+    // FAQ structured data
     const existingFaqScript = document.getElementById('faq-structured-data');
     if (existingFaqScript) {
       existingFaqScript.remove();
@@ -74,7 +67,7 @@ function SEOHead({ title, description, path = '/', keywords, faqItems, noindex =
         script.remove();
       }
     };
-  }, [title, description, path, keywords, faqItems]);
+  }, [title, description, path, faqItems]);
 
   return null;
 }

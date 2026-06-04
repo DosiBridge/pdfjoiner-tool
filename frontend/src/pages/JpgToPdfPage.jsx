@@ -19,7 +19,6 @@ function JpgToPdfPage() {
         title="JPG to PDF — Convert JPEG Images to PDF Free | DOSIBridge"
         description="Convert JPG and JPEG images to PDF documents. Combine multiple photos into one PDF. Free online."
         path="/jpg-to-pdf"
-        keywords="JPG to PDF, JPEG to PDF, convert JPG to PDF, photo to PDF, multiple JPG to PDF"
         faqItems={faqItems}
       />
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-12 md:py-16">

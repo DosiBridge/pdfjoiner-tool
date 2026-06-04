@@ -19,7 +19,6 @@ function CompressPdfPage() {
         title="Compress PDF — Reduce PDF File Size Online Free | DOSIBridge"
         description="Reduce PDF file size without losing quality. Free online PDF compressor — no signup, no watermark."
         path="/compress-pdf"
-        keywords="compress PDF, reduce PDF size, PDF compressor, shrink PDF, make PDF smaller"
         faqItems={faqItems}
       />
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-12 md:py-16">

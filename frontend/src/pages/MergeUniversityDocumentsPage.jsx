@@ -34,7 +34,6 @@ function MergeUniversityDocumentsPage() {
         title="Merge University Documents PDF — Transcripts, Certificates, Applications | DOSIBridge"
         description="Combine university transcripts, degree certificates, recommendation letters, and application forms into one PDF. Free, secure, and ready for submission."
         path="/merge-university-documents-pdf"
-        keywords="merge university documents PDF, combine transcripts PDF, merge academic documents, university application PDF, merge degree certificates, combine school documents"
         faqItems={faqItems}
       />
 

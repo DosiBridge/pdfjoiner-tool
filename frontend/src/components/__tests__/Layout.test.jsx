@@ -4,9 +4,7 @@ import Layout from '../Layout';
 
 describe('Layout', () => {
   it('renders children content', () => {
-    renderWithRouter(
-      <Layout><div>Child Content</div></Layout>
-    );
+    renderWithRouter(<Layout><div>Child Content</div></Layout>);
     expect(screen.getByText('Child Content')).toBeInTheDocument();
   });
 
@@ -25,23 +23,10 @@ describe('Layout', () => {
     expect(document.getElementById('main-content')).toBeTruthy();
   });
 
-  it('renders footer with PDF tools links', () => {
+  it('renders footer with tool links', () => {
     renderWithRouter(<Layout><div /></Layout>);
-    expect(screen.getByText('PDF Tools')).toBeInTheDocument();
     expect(screen.getByText('Merge PDF')).toBeInTheDocument();
-    expect(screen.getByText('PDF Joiner')).toBeInTheDocument();
-  });
-
-  it('renders footer with use case links', () => {
-    renderWithRouter(<Layout><div /></Layout>);
-    expect(screen.getByText('Use Cases')).toBeInTheDocument();
-    expect(screen.getByText('Job Applications')).toBeInTheDocument();
-  });
-
-  it('renders footer with guide links', () => {
-    renderWithRouter(<Layout><div /></Layout>);
-    expect(screen.getByText('Guides')).toBeInTheDocument();
-    expect(screen.getByText('How to Merge PDFs')).toBeInTheDocument();
+    expect(screen.getByText('Compress PDF')).toBeInTheDocument();
   });
 
   it('renders footer with DOSIBridge external links', () => {

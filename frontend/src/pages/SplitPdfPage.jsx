@@ -21,7 +21,6 @@ function SplitPdfPage() {
         title="Split PDF — Extract Pages from PDF Online Free | DOSIBridge"
         description="Split a PDF into separate files or extract specific pages. Free online PDF splitter — no signup, no watermark."
         path="/split-pdf"
-        keywords="split PDF, extract PDF pages, PDF splitter, split PDF online, separate PDF pages"
         faqItems={faqItems}
       />
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-12 md:py-16">

@@ -29,7 +29,6 @@ function HowToReorderPdfPage() {
         title="How to Reorder PDF Pages Before Merging — Free Guide | DOSIBridge"
         description="Learn how to rearrange PDF pages before merging them. Drag-and-drop page reordering, cross-file interleaving, and page removal. Free online, no software needed."
         path="/blog/how-to-reorder-pdf-before-merging"
-        keywords="how to reorder PDF pages, rearrange PDF pages, reorder PDF before merging, how to rearrange pages in PDF, reorder PDF pages online, drag and drop PDF pages"
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">

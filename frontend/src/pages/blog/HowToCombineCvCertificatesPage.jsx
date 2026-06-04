@@ -29,7 +29,6 @@ function HowToCombineCvCertificatesPage() {
         title="How to Combine CV and Certificates into One PDF — Guide | DOSIBridge"
         description="Step-by-step guide to merging your CV, certificates, and diplomas into one professional PDF for job applications. Includes recommended order and formatting tips."
         path="/blog/how-to-combine-cv-certificates-into-one-pdf"
-        keywords="how to combine CV and certificates PDF, merge CV certificates, how to merge resume and certificates, combine diploma CV PDF, CV certificate one PDF"
       />
 
       <section className="bg-gradient-to-b from-primary-50 to-white py-8 sm:py-10 md:py-12">
