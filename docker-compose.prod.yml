@@ -12,6 +12,9 @@ services:
       - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000}
       - MAX_FILE_SIZE=${MAX_FILE_SIZE:-52428800}
       - MAX_FILES_PER_REQUEST=${MAX_FILES_PER_REQUEST:-20}
+      - UPLOAD_FOLDER=/app/temp/uploads
+      - THUMBNAIL_FOLDER=/app/temp/thumbnails
+      - MERGED_FOLDER=/app/temp/merged
       - RATE_LIMIT=${RATE_LIMIT:-100 per hour}
       - SESSION_TIMEOUT=${SESSION_TIMEOUT:-3600}
       - THUMBNAIL_DPI=${THUMBNAIL_DPI:-150}
