@@ -49,5 +49,6 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD wget --quiet --tries=1 --spider http://localhost:3000/ || exit 1
 
 # Start serve (no -s flag: uses serve.json rewrites for per-route HTML, then SPA fallback)
-CMD ["serve", "dist", "-l", "3000", "--config", "dist/serve.json"]
+# serve resolves --config relative to the served directory, so this maps to /app/dist/serve.json.
+CMD ["serve", "dist", "-l", "3000", "--config", "serve.json"]
 
