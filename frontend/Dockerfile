@@ -30,16 +30,12 @@ ENV VITE_API_TARGET=${VITE_API_TARGET}
 RUN npm run build
 
 # Stage 2: Production
-FROM node:18-alpine
+FROM nginx:1.27-alpine
 
-WORKDIR /app
-
-# Install serve globally for static file serving
-RUN npm install -g serve
-
-# Copy built files and serve config from builder stage
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/serve.json ./dist/serve.json
+# Copy built files and nginx config. nginx try_files serves generated per-route
+# SEO HTML such as /merge-pdf/index.html for clean routes like /merge-pdf.
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port
 EXPOSE 3000
@@ -48,7 +44,5 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD wget --quiet --tries=1 --spider http://localhost:3000/ || exit 1
 
-# Start serve (no -s flag: uses serve.json rewrites for per-route HTML, then SPA fallback)
-# serve resolves --config relative to the served directory, so this maps to /app/dist/serve.json.
-CMD ["serve", "dist", "-l", "3000", "--config", "serve.json"]
+CMD ["nginx", "-g", "daemon off;"]
 
