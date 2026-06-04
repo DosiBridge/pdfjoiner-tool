@@ -107,25 +107,53 @@ jobs:
           printf '%s\n' "${{ secrets.PROD_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      - name: Deploy latest images with existing Docker Compose
+      - name: Deploy exact images with isolated Docker Compose project
         env:
           PROD_HOST: ${{ secrets.PROD_HOST }}
           PROD_USER: ${{ secrets.PROD_USER }}
           PROD_PORT: ${{ secrets.PROD_PORT }}
           COMPOSE_FILE: ${{ secrets.PROD_COMPOSE_FILE }}
+          IMAGE_TAG: ${{ needs.build-and-push.outputs.sha_tag }}
         run: |
           set -euo pipefail
           ssh -i ~/.ssh/id_ed25519 -p "${PROD_PORT:-22}" \
             -o IdentitiesOnly=yes \
             -o BatchMode=yes \
             "${PROD_USER}@${PROD_HOST}" \
-            "COMPOSE_FILE='${COMPOSE_FILE}' bash -s" <<'REMOTE'
+            "COMPOSE_FILE='${COMPOSE_FILE}' IMAGE_TAG='${IMAGE_TAG}' bash -s" <<'REMOTE'
           set -euo pipefail
+          COMPOSE_PROJECT="pdfjoiner"
+          LOCK_FILE="/tmp/pdfjoiner-deploy.lock"
+
+          check_protected_services() {
+            echo "Checking protected shared services before/after PDF Joiner deploy..."
+            docker ps --format '{{.Names}} {{.Status}}' | grep -q '^dosi_postgres_db ' || { echo "Protected Postgres container is not running"; exit 1; }
+            curl -fsS --max-time 15 http://127.0.0.1:40000/api/abp/application-configuration >/dev/null || { echo "eShop API local health failed"; exit 1; }
+            curl -fsS --max-time 15 http://127.0.0.1:40001/.well-known/openid-configuration >/dev/null || { echo "eShop auth local health failed"; exit 1; }
+            curl -fsSI --max-time 15 http://127.0.0.1:8081/ >/dev/null || { echo "DosiBridge root frontend local health failed"; exit 1; }
+          }
+
+          export COMPOSE_FILE IMAGE_TAG
+          flock "$LOCK_FILE" bash -s <<'REMOTE_DEPLOY'
+          set -euo pipefail
+          COMPOSE_PROJECT="pdfjoiner"
           cd "$(dirname "$COMPOSE_FILE")"
           echo "Deploying from compose file: $COMPOSE_FILE"
-          docker compose -f "$COMPOSE_FILE" pull backend frontend
-          docker compose -f "$COMPOSE_FILE" up -d --remove-orphans backend frontend
-          docker compose -f "$COMPOSE_FILE" ps backend frontend
+          echo "Deploying image tag: $IMAGE_TAG"
+
+          check_protected_services() {
+            docker ps --format '{{.Names}} {{.Status}}' | grep -q '^dosi_postgres_db ' || { echo "Protected Postgres container is not running"; exit 1; }
+            curl -fsS --max-time 15 http://127.0.0.1:40000/api/abp/application-configuration >/dev/null || { echo "eShop API local health failed"; exit 1; }
+            curl -fsS --max-time 15 http://127.0.0.1:40001/.well-known/openid-configuration >/dev/null || { echo "eShop auth local health failed"; exit 1; }
+            curl -fsSI --max-time 15 http://127.0.0.1:8081/ >/dev/null || { echo "DosiBridge root frontend local health failed"; exit 1; }
+          }
+
+          check_protected_services
+          IMAGE_TAG="$IMAGE_TAG" docker compose -p "$COMPOSE_PROJECT" -f "$COMPOSE_FILE" pull backend frontend
+          IMAGE_TAG="$IMAGE_TAG" docker compose -p "$COMPOSE_PROJECT" -f "$COMPOSE_FILE" up -d --no-deps backend frontend
+          IMAGE_TAG="$IMAGE_TAG" docker compose -p "$COMPOSE_PROJECT" -f "$COMPOSE_FILE" ps backend frontend
+          check_protected_services
+          REMOTE_DEPLOY
           REMOTE
 
       - name: Verify production health
