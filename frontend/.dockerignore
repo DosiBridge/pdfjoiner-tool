@@ -43,9 +43,6 @@ Dockerfile
 .dockerignore
 docker-compose.yml
 
-# Nginx (not used)
-nginx.conf
-
 # Source maps (optional, can be included for debugging)
 *.map
 
