@@ -120,8 +120,116 @@ const pages = [
   },
 ];
 
+const toolLinks = [
+  ['/', 'PDF Joiner Home'],
+  ['/merge-pdf', 'Merge PDF'],
+  ['/merge-pdf-online-free', 'Free PDF Merger'],
+  ['/merge-pdf-no-watermark', 'No-watermark PDF merger'],
+  ['/merge-pdf-on-mobile', 'Merge PDF on mobile'],
+  ['/merge-pdf-for-job-application', 'Job application PDFs'],
+  ['/combine-cv-and-certificates-pdf', 'CV and certificates PDF'],
+  ['/reorder-pdf', 'Reorder PDF pages'],
+  ['/delete-pdf-pages', 'Delete PDF pages'],
+  ['/compress-pdf', 'Compress PDF'],
+  ['/split-pdf', 'Split PDF'],
+  ['/image-to-pdf', 'Image to PDF'],
+];
+
+const blogLinks = [
+  ['/blog/how-to-merge-pdf-files-online', 'How to merge PDF files online'],
+  ['/blog/how-to-combine-cv-certificates-into-one-pdf', 'Combine CV and certificates into one PDF'],
+  ['/blog/how-to-merge-pdf-on-mobile', 'Merge PDF on iPhone and Android'],
+  ['/blog/how-to-reorder-pdf-before-merging', 'Reorder PDF pages before merging'],
+];
+
+const blogCopy = {
+  '/blog/how-to-merge-pdf-files-online': [
+    ['Fastest method: merge PDFs online', 'Open the DOSIBridge merge tool, upload the PDF files, choose the pages you want to keep, reorder them, and download one clean PDF. This is usually faster than installing desktop software because it works directly in Chrome, Edge, Firefox, Safari, and mobile browsers.'],
+    ['Mac, Windows, and mobile options', 'Mac users can use Preview for small jobs, but it is limited for batch uploads and page selection. Windows does not include a built-in PDF merger, so a browser-based tool is often the simplest option. Mobile users can pick files from local storage, Google Drive, iCloud, Dropbox, or OneDrive.'],
+    ['Quality checklist before downloading', 'Check page order, remove blank pages from scans, use a descriptive filename, and add page numbers or password protection when the document is long or sensitive. For job applications, keep the CV first and place supporting documents after it.'],
+  ],
+  '/blog/how-to-combine-cv-certificates-into-one-pdf': [
+    ['Why one application PDF is better', 'Sending a single merged PDF is easier for HR teams to review than many separate attachments. It also avoids missing files in email threads and works better when a job portal only provides one upload field.'],
+    ['Recommended order', 'Place the CV or resume first, then the most relevant professional certificates, then academic certificates, language certificates, and older supporting credentials. Remove irrelevant certificates so the final document looks focused.'],
+    ['Before submitting', 'Use readable scans, remove blank backs of scanned pages, name the file with your name and role, and verify the merged document opens correctly on phone and desktop before uploading it to the employer portal.'],
+  ],
+  '/blog/how-to-merge-pdf-on-mobile': [
+    ['Merge PDFs on iPhone', 'Open Safari or Chrome, choose the upload area, select PDFs from Files, iCloud Drive, Google Drive, Dropbox, or OneDrive, then reorder pages using touch controls. After merging, save the final PDF to Downloads or Files.'],
+    ['Merge PDFs on Android', 'Open Chrome, upload PDFs from the Android file picker or cloud apps, preview pages, remove unnecessary pages, reorder with drag-and-drop, and download the combined document. No app installation or subscription is needed.'],
+    ['Mobile tips', 'Use Wi-Fi for large files, rotate tablets to landscape for more page preview space, and add the site to your home screen if you merge documents often. The tool works as a browser-based PDF workflow.'],
+  ],
+  '/blog/how-to-reorder-pdf-before-merging': [
+    ['Why page order matters', 'Merged PDFs are easier to read when pages follow the reviewer’s workflow. Put cover pages, CVs, invoices, or forms in the correct order before generating the final document.'],
+    ['How to reorder', 'Upload the PDFs, select the pages to include, drag pages into the desired order, remove duplicates or blanks, and then merge. Cross-file ordering lets you place pages from different PDFs exactly where they belong.'],
+    ['Final review', 'Preview the first and last pages, verify page numbers, check that scanned pages are upright, and use a clear filename before sharing the merged PDF.'],
+  ],
+};
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
+}
+
+function renderLinks(items) {
+  return items
+    .map(([path, label]) => `<li><a href="${BASE_URL}${path === '/' ? '/' : path}">${escapeHtml(label)}</a></li>`)
+    .join('\n');
+}
+
+function renderStaticFallback(page) {
+  const sections = blogCopy[page.route] || [
+    ['Free browser-based PDF workflow', `${page.description} DOSIBridge works in the browser, so users can combine, reorder, split, compress, convert, and clean up documents without creating an account.`],
+    ['Useful document tasks', 'Common workflows include combining job application files, merging university documents, cleaning scanned files, rearranging pages, removing blank pages, and creating one organized PDF for email or upload portals.'],
+    ['Privacy and convenience', 'The tool is designed for quick document handling with no signup and no watermark. It works on desktop and mobile browsers, including Windows, Mac, Linux, Chromebook, iPhone, iPad, and Android.'],
+  ];
+
+  return `<div id="root">
+    <div class="seo-static-fallback">
+      <header>
+        <p><a href="${BASE_URL}/">DOSIBridge PDF Joiner</a></p>
+        <nav aria-label="Primary PDF tools"><ul>${renderLinks(toolLinks)}</ul></nav>
+      </header>
+      <main>
+        <article>
+          <h1>${escapeHtml(page.h1)}</h1>
+          <p>${escapeHtml(page.description)}</p>
+          ${sections.map(([heading, text]) => `<section><h2>${escapeHtml(heading)}</h2><p>${escapeHtml(text)}</p></section>`).join('\n')}
+          <section>
+            <h2>Related PDF guides</h2>
+            <ul>${renderLinks(blogLinks)}</ul>
+          </section>
+        </article>
+      </main>
+      <footer>
+        <p>DOSIBridge PDF Joiner is a free online PDF tool for merging, reordering, compressing, splitting, and converting documents.</p>
+      </footer>
+    </div>
+  </div>`;
+}
+
+function articleSchema(page, canonicalUrl) {
+  if (!page.route.startsWith('/blog/')) return '';
+
+  return `<script type="application/ld+json">
+${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: page.h1,
+    description: page.description,
+    url: canonicalUrl,
+    mainEntityOfPage: canonicalUrl,
+    author: { '@type': 'Organization', name: 'DOSIBridge' },
+    publisher: { '@type': 'Organization', name: 'DOSIBridge' },
+    dateModified: new Date().toISOString().slice(0, 10),
+  }, null, 2)}
+    </script>`;
+}
+
 function generatePage(templateHtml, page) {
-  const canonicalUrl = `${BASE_URL}${page.route}`;
+  const canonicalUrl = `${BASE_URL}${page.route === '/' ? '/' : page.route}`;
   let html = templateHtml;
 
   // Replace title
@@ -169,17 +277,26 @@ function generatePage(templateHtml, page) {
     `<meta name="twitter:description" content="${page.description}"`
   );
 
-  // Replace noscript with page-specific H1 and description
+  // Add raw Article schema for blog pages before the closing head.
+  html = html.replace('</head>', `${articleSchema(page, canonicalUrl)}\n  </head>`);
+
+  // Replace noscript with page-specific H1, description, and links.
   html = html.replace(
     /<noscript>[\s\S]*?<\/noscript>/,
     `<noscript>
-      <div style="padding: 2rem; text-align: center; font-family: system-ui, sans-serif;">
-        <h1>${page.h1}</h1>
-        <p>${page.description}</p>
+      <div style="padding: 2rem; font-family: system-ui, sans-serif; max-width: 760px; margin: auto;">
+        <h1>${escapeHtml(page.h1)}</h1>
+        <p>${escapeHtml(page.description)}</p>
         <p><a href="${BASE_URL}/">Back to DOSIBridge PDF Joiner</a></p>
+        <ul>${renderLinks(blogLinks)}</ul>
       </div>
     </noscript>`
   );
+
+  // Vite serves an empty SPA root by default. Add crawlable static HTML into
+  // the initial document; React replaces it after JS loads. This gives Google
+  // meaningful content and internal links even before the rendering queue runs.
+  html = html.replace(/<div id="root"><\/div>/, renderStaticFallback(page));
 
   return html;
 }
@@ -195,6 +312,16 @@ function main() {
   const templateHtml = readFileSync(templatePath, 'utf-8');
   let generated = 0;
 
+  const homePage = {
+    route: '/',
+    title: 'Merge PDF Online Free — No Signup, No Watermark, Unlimited | DOSIBridge',
+    description: 'Merge PDFs online for free. Reorder pages, combine CVs, certificates, scanned files, and documents. No signup, no watermark, unlimited, works on mobile.',
+    h1: 'DOSIBridge PDF Joiner',
+  };
+
+  writeFileSync(templatePath, generatePage(templateHtml, homePage), 'utf-8');
+  generated++;
+
   for (const page of pages) {
     const html = generatePage(templateHtml, page);
     const routeDir = join(DIST, page.route);
@@ -203,6 +330,16 @@ function main() {
     mkdirSync(routeDir, { recursive: true });
     writeFileSync(outputPath, html, 'utf-8');
     generated++;
+  }
+
+  const sitemapPath = join(DIST, 'sitemap.xml');
+  if (existsSync(sitemapPath)) {
+    const today = new Date().toISOString().slice(0, 10);
+    const sitemap = readFileSync(sitemapPath, 'utf-8').replace(
+      /<lastmod>[^<]+<\/lastmod>/g,
+      `<lastmod>${today}</lastmod>`
+    );
+    writeFileSync(sitemapPath, sitemap, 'utf-8');
   }
 
   console.log(`Generated ${generated} static HTML files for SEO.`);
